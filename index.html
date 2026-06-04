@@ -3,472 +3,1156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administración - Variedades Alejandro</title>
+    <title>Variedades Alejandro</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+
     <style>
-        :root {
-            --azul: #1a4373;
-            --rosado: #ff85a1;
-            --gris-luz: #e2e8f0;
-            --blanco: #f8fafc;
-            --negro: #0f172a;
-            --danger: #ef4444;
-            --success: #22c55e;
-            --sombra: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
+       :root {
+    --azul: #1a4373;
+    --rosado: #ff85a1;
+    --gris-luz: #e2e8f0;
+    --blanco: #f8fafc;
+    --negro: #0f172a;
+    --whatsapp: #25d366;
+    --danger: #ef4444;
+    --sombra: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
 
-        * { box-sizing: border-box; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+* {
+    box-sizing: border-box;
+}
 
-        body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background: radial-gradient(circle at top left, #f8fafc, #e2e8f0);
-            color: var(--negro);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+html {
+    scroll-behavior: smooth;
+}
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--gris-luz);
+    color: var(--negro);
+    overflow-x: hidden;
+}
 
-        @keyframes slideIn {
-            from { transform: translateX(-30px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
+/* --- NAVEGACIÓN (TRES RAYITAS GLOBAL EN PC Y CELULAR) --- */
+#menu-toggle {
+    display: none;
+}
 
-        /* Pantalla de Login */
-        #login-screen {
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(135deg, var(--azul) 0%, #0f172a 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
 
-        .login-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 40px;
-            border-radius: 30px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            animation: fadeInUp 0.6s ease-out;
-        }
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+}
 
-        /* Layout del Dashboard */
-        .admin-wrapper {
-            display: none; /* Se activa tras login */
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 30px;
-            width: 100%;
-            animation: fadeInUp 0.8s ease-out;
-        }
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
 
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding: 0 10px;
-        }
+.logo-area img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+}
 
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 400px 1fr;
-            gap: 30px;
-        }
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
 
-        .admin-logo {
-            width: 70px;
-            height: 70px;
-            object-fit: contain;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
-        }
+.logo-title {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--azul);
+    letter-spacing: -0.5px;
+    line-height: 1;
+}
 
-        /* --- RESPONSIVIDAD --- */
-        @media (max-width: 1024px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr; /* Apilar formulario sobre inventario */
-            }
-            .admin-wrapper {
-                padding: 20px;
-            }
-        }
+.logo-subtitle {
+    font-size: 0.75rem;
+    color: var(--rosado);
+    font-weight: 600;
+}
 
-        @media (max-width: 600px) {
-            .login-card {
-                padding: 25px 20px;
-                margin: 15px;
-                border-radius: 24px;
-            }
-            .dashboard-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            .dashboard-header .btn-modern {
-                width: 100%;
-                justify-content: center;
-            }
-            .glass-card {
-                padding: 20px;
-            }
-        }
+/* MENÚ DESLIZANTE PARA TODOS LOS DISPOSITIVOS */
+.nav-menu {
+    position: fixed;
+    top: 75px;
+    left: -100%;
+    width: 100%;
+    height: calc(100vh - 75px);
+    background: white;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    transition: 0.3s;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    display: flex;
+    gap: 30px;
+    list-style: none;
+    margin: 0;
+}
 
-        .glass-card {
-            background: white;
-            padding: 30px;
-            border-radius: 24px;
-            box-shadow: var(--sombra);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
+/* DESPLEGAR CUANDO SE SELECCIONEN LAS TRES RAYITAS */
+#menu-toggle:checked ~ .nav-menu {
+    left: 0;
+}
 
-        .btn-modern {
-            text-decoration: none;
-            background: var(--azul);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 15px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
+.nav-link {
+    text-decoration: none;
+    color: var(--negro);
+    font-weight: 600;
+    font-size: 1.2rem;
+    transition: color 0.3s;
+    position: relative;
+}
 
-        .btn-modern:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(26, 67, 115, 0.3);
-        }
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--rosado);
+    transition: width 0.3s;
+}
 
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.85rem; color: #64748b; }
-        
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #f1f5f9;
-            border-radius: 14px;
-            background: #f8fafc;
-            font-family: inherit;
-        }
-        
-        .form-control:focus { border-color: var(--azul); outline: none; background: white; }
+.nav-link:hover::after {
+    width: 100%;
+}
 
-        /* Inventario */
-        .search-box {
-            margin-bottom: 20px;
-            position: relative;
-        }
+.nav-link:hover {
+    color: var(--azul);
+}
 
-        .inventory-list {
-            display: grid;
-            gap: 15px;
-            max-height: 600px;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
+.admin-trigger {
+    background: var(--azul);
+    color: white !important;
+    padding: 10px 24px;
+    border-radius: 20px;
+    font-size: 0.95rem;
+}
 
-        .inventory-item {
-            display: flex;
-            align-items: center;
-            background: #f8fafc;
-            padding: 12px 20px;
-            border-radius: 18px;
-            border: 1px solid transparent;
-            animation: slideIn 0.4s ease-out backwards;
-        }
+.admin-trigger:hover {
+    background: #123256;
+}
 
-        .inventory-item:hover {
-            background: white;
-            border-color: var(--gris-luz);
-            transform: scale(1.01);
-        }
+.nav-link.admin-trigger::after {
+    display: none;
+}
 
-        /* CORRECCIÓN: Contenedor y ajuste adaptativo para fotos en la lista */
-        .item-img {
-            width: 50px;
-            height: 65px; /* Un poco más alto para favorecer ropa larga */
-            border-radius: 8px;
-            object-fit: contain; /* Muestra toda la prenda sin cortes */
-            margin-right: 15px;
-            background: #f1f5f9; /* Fondo suave para los espacios de fotos transparentes o angostas */
-            border: 1px solid #e2e8f0;
-            flex-shrink: 0;
-        }
+/* ICONO DE LAS TRES RAYITAS ACTIVO SIEMPRE */
+.menu-icon {
+    display: flex !important;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 6px;
+}
 
-        .item-info { flex-grow: 1; }
-        .item-name { font-weight: 600; display: block; }
-        .item-price { color: var(--azul); font-size: 0.9rem; font-weight: 700; }
+.menu-icon span {
+    width: 28px;
+    height: 3px;
+    background: var(--azul);
+    border-radius: 2px;
+    transition: 0.3s;
+}
 
-        .action-btns { display: flex; gap: 8px; }
-        .btn-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .btn-edit { background: var(--azul); }
-        .btn-del { background: var(--danger); }
+/* ANIMACIÓN DE LA X AL DAR CLIC */
+#menu-toggle:checked ~ .menu-icon span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
 
-        /* CORRECCIÓN: Previsualización de formulario adaptada a ropa larga */
-        #img-preview {
-            width: 120px;
-            height: 160px; /* Proporción ideal vertical */
-            object-fit: contain; /* No deforma el pantalón en el preview */
-            border-radius: 12px;
-            border: 2px solid var(--gris-luz);
-            background: #f1f5f9;
-            display: block;
-        }
+#menu-toggle:checked ~ .menu-icon span:nth-child(2) {
+    opacity: 0;
+}
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--gris-luz); border-radius: 10px; }
+#menu-toggle:checked ~ .menu-icon span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -7px);
+}
+
+/* --- PORTADA --- */
+.hero {
+    height: 70vh;
+    min-height: 500px;
+    background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.7)), url('./local3.jpeg') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    padding: 0 20px;
+    margin-top: 75px;
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin: 0 0 15px 0;
+    letter-spacing: -1px;
+    line-height: 1.1;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin: 0 0 30px 0;
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+/* --- CONTENEDOR GENERAL --- */
+.container {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.section-title h2 {
+    font-size: 2.2rem;
+    color: var(--azul);
+    margin: 0 0 10px 0;
+}
+
+.section-title p {
+    color: #64748b;
+    margin: 0;
+    font-size: 1rem;
+}
+
+/* --- CATEGORÍAS EN UNA SOLA FILA DESLIZABLE --- */
+.categories-grid {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 15px 5px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.categories-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.cat-card {
+    background: white;
+    padding: 10px 20px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: var(--sombra);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-height: 50px;
+}
+
+.cat-card.active, .cat-card:hover {
+    border-color: var(--rosado);
+    transform: translateY(-2px);
+}
+
+.cat-card span {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--negro);
+}
+
+/* --- BUSCADOR --- */
+.search-wrapper {
+    max-width: 500px;
+    margin: 0 auto 40px auto;
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 25px;
+    border: 2px solid var(--gris-luz);
+    border-radius: 30px;
+    font-family: inherit;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.search-input:focus {
+    border-color: var(--azul);
+}
+
+/* --- TIENDA GRID (CORREGIDO PARA ALTURAS DINÁMICAS) --- */
+.store-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 30px;
+    align-items: start; /* Evita que las tarjetas pequeñas se estiren feo */
+}
+
+.product-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--sombra);
+    transition: transform 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Contenedor de imagen en la tienda: flexible hacia abajo */
+.prod-img-box {
+    position: relative;
+    width: 100%;
+    background: #f1f5f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.prod-img-box img {
+    width: 100%;
+    height: auto;
+    max-height: 380px; /* Límite para que pantalones largos no rompan todo */
+    object-fit: contain; /* Evita recortes de la foto original */
+    display: block;
+}
+
+.prod-info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.prod-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    color: var(--negro);
+    line-height: 1.3;
+}
+
+.prod-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.prod-price {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--azul);
+}
+
+.order-btn {
+    background: var(--whatsapp);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 25px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.3s;
+}
+
+.order-btn:hover {
+    background: #1ebd58;
+}
+
+/* --- MODAL DETALLE / ADM --- */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+}
+
+.modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    position: relative;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal.active .modal-content,
+.modal.active .modal-content-wide {
+    transform: translateY(0);
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--azul);
+    color: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+/* --- NUEVO DISEÑO HORIZONTAL PREMIUM (PC - FIJO DOS COLUMNAS) --- */
+.modal-content-wide {
+    background: white;
+    width: 100%;
+    max-width: 900px;
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    position: relative;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+    display: grid;
+    grid-template-columns: 1fr 1.1fr; /* Columna izquierda e info derecha */
+    gap: 40px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-left-column {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Bloque contenedor izquierdo fijo */
+.modal-img-container {
+    width: 100%;
+    height: 450px;
+    max-height: 450px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--gris-luz);
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Imagen interna del modal (Forzada a no romper la estructura de PC) */
+.modal-img-container img {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* No deforma ni corta el pantalón */
+    display: block;
+}
+
+.modal-right-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+.modal-product-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--azul);
+    margin: 0 0 10px 0;
+    letter-spacing: -0.5px;
+}
+
+.modal-product-price {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--rosado);
+    margin: 0 0 20px 0;
+}
+
+.modal-product-desc {
+    font-size: 0.95rem;
+    color: #475569;
+    line-height: 1.5;
+    margin: 0 0 25px 0;
+}
+
+.size-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--azul);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.size-options {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.size-btn {
+    border: 2px solid var(--gris-luz);
+    background: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.size-btn.selected {
+    border-color: var(--azul);
+    background: var(--azul);
+    color: white;
+}
+
+.qty-area {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 0 0 25px 0 !important;
+}
+
+.qty-controls {
+    display: flex;
+    align-items: center;
+    border: 2px solid var(--gris-luz);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.qty-btn {
+    background: transparent;
+    border: none;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.qty-val {
+    width: 40px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.send-wp-final {
+    width: 100%;
+    background: var(--whatsapp);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 30px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* --- FORMULARIOS ADMIN --- */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--gris-luz);
+    border-radius: 10px;
+    font-family: inherit;
+    outline: none;
+}
+
+.form-control:focus {
+    border-color: var(--azul);
+}
+
+.admin-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gris-luz);
+}
+
+.del-btn {
+    background: var(--danger);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* --- UBICACIÓN OPTIMIZADA --- */
+.location {
+    background: #e2e8f0;
+    text-align: left !important;
+    max-width: 1000px; 
+    margin: 60px auto;
+}
+
+.location h2 {
+    display: block !important;
+    text-align: left;
+    margin-bottom: 40px;
+}
+
+.location h2::after {
+    left: 0;
+    transform: none;
+}
+
+.loc-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 40px; 
+    align-items: start;
+}
+
+.loc-left-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; 
+}
+
+.address-text {
+    font-size: 1.05rem;
+    color: #475569;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.address-text strong {
+    color: var(--azul);
+}
+
+.loc-img-container {
+    width: 100%;
+    height: 240px; 
+    max-width: 400px; 
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--sombra);
+}
+
+.loc-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.map-container {
+    width: 100%;
+    height: 380px; 
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--sombra);
+}
+
+.map-container iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* --- FOOTER --- */
+footer {
+    background: var(--azul);
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    font-size: 0.9rem;
+}
+
+footer p {
+    margin: 5px 0;
+    opacity: 0.7;
+}
+
+/* --- RESPONSIVO PARA MEDIANAS PANTALLES / TABLETAS --- */
+@media (max-width: 992px) {
+    .loc-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .loc-img-container {
+        max-width: 100%;
+        height: 240px;
+    }
+
+    .map-container {
+        height: 340px;
+    }
+}
+
+/* --- RESPONSIVO PARA DISPOSITIVOS MÓVILES (TELÉFONOS) --- */
+@media(max-width: 768px) {
+    .hero h1 {
+        font-size: 2.3rem;
+    }
+
+    /* DOS COLUMNAS EN LA TIENDA CON CARDS ADAPTABLES */
+    .store-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+        align-items: start;
+    }
+
+    .product-card {
+        border-radius: 12px !important;
+    }
+
+    /* Imagen fluida en móvil */
+    .prod-img-box {
+        height: auto !important;
+    }
+    
+    .prod-img-box img {
+        max-height: 240px; /* Límite cómodo para celular */
+    }
+
+    .prod-info {
+        padding: 10px !important;
+    }
+
+    .prod-title {
+        font-size: 0.9rem !important;
+        margin-bottom: 8px !important;
+    }
+
+    .prod-meta {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 6px;
+    }
+
+    .prod-price {
+        font-size: 1.1rem !important;
+    }
+
+    .order-btn {
+        width: 100% !important;
+        justify-content: center;
+        padding: 6px 10px !important;
+        font-size: 0.8rem !important;
+    }
+
+    /* ADAPTACIÓN EN EL MODAL PARA MÓVIL (Pasa a ser vertical arriba/abajo) */
+    .modal-content-wide {
+        grid-template-columns: 1fr !important;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .modal-img-container {
+        height: 280px !important; /* Altura controlada para móvil */
+    }
+    
+    .modal-img-container img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain;
+    }
+
+    .modal-product-title {
+        font-size: 1.5rem;
+    }
+}
     </style>
 </head>
 <body>
 
-    <!-- Pantalla de Inicio de Sesión -->
-    <div id="login-screen">
-        <div class="login-card">
-            <img src="sflogoVa.png" alt="Logo" style="width: 100px; height: 100px; object-fit: contain; margin-bottom: 10px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));">
-            <h2 style="color: var(--azul); margin-bottom: 25px;">Acceso Administrativo</h2>
-            <form onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label>Usuario</label>
-                    <input type="text" id="user" class="form-control" required placeholder="Ej: nombre">
+    <header class="header">
+        <div class="nav-container">
+            <a href="#" class="logo-area">
+                <img src="./sflogoVa.png" alt="Logo Alejandro" onerror="this.style.opacity='0.5';">
+                <div class="logo-text">
+                    <span class="logo-title">Alejandro</span>
+                    <span class="logo-subtitle">Variedades & Salón</span>
                 </div>
-                <div class="form-group">
-                    <label>Contraseña</label>
-                    <input type="password" id="pass" class="form-control" required placeholder="••••••••">
-                </div>
-                <button type="submit" class="btn-modern" style="width: 100%; justify-content: center; background: var(--rosado); margin-top: 10px;">Acceder ahora</button>
-                <p style="margin-top: 20px;"><a href="index.html" style="color: var(--azul); text-decoration: none; font-size: 0.85rem; font-weight: 600;">← Volver a la tienda</a></p>
-            </form>
-        </div>
-    </div>
+            </a>
 
-    <div class="admin-wrapper" id="admin-panel">
-        <header class="dashboard-header">
-            <div style="display: flex; align-items: center; gap: 20px;">
-                <img src="sflogoVa.png" alt="Logo" class="admin-logo">
-                <div>
-                    <h1 style="margin: 0; color: var(--azul); font-size: 1.8rem;">Dashboard de Alejandro</h1>
-                    <p style="margin: 5px 0 0; color: #64748b; font-size: 0.9rem;">Gestiona tus productos y servicios</p>
+            <input type="checkbox" id="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+
+           <ul class="nav-menu">
+                <li><a href="#" class="nav-link" onclick="document.getElementById('menu-toggle').checked = false">Inicio</a></li>
+                <li><a href="#catalogo" class="nav-link" onclick="document.getElementById('menu-toggle').checked = false">Catálogo</a></li>
+                <li><a href="#ubicacion" class="nav-link" onclick="document.getElementById('menu-toggle').checked = false">Ubicación</a></li>
+                
+            </ul>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>VARIEDADES ALEJANDRO</h1>
+            <p>Explora ropa para toda la familia, electrodomésticos eficientes y servicios exclusivos de salón de belleza en Ahuachapán.</p>
+        </div>
+    </section>
+
+    <main class="container" id="catalogo">
+        <div class="section-title">
+            <h2>Nuestro Catálogo</h2>
+            <p>Filtrado por categorías para una búsqueda más cómoda</p>
+        </div>
+
+        <div class="categories-grid">
+            <div class="cat-card active" data-cat="all" onclick="filterCategory('all')">
+                <span>Todo</span>
+            </div>
+            <div class="cat-card" data-cat="electro" onclick="filterCategory('electro')">
+                <span>Electrodomésticos</span>
+            </div>
+            <div class="cat-card" data-cat="mujer-ropa" onclick="filterCategory('mujer-ropa')">
+                <span>Ropa Mujer</span>
+            </div>
+            <div class="cat-card" data-cat="mujer-calzado" onclick="filterCategory('mujer-calzado')">
+                <span>Calzado Mujer</span>
+            </div>
+            <div class="cat-card" data-cat="hombre-ropa" onclick="filterCategory('hombre-ropa')">
+                <span>Ropa Hombre</span>
+            </div>
+            <div class="cat-card" data-cat="hombre-calzado" onclick="filterCategory('hombre-calzado')">
+                <span>Calzado Hombre</span>
+            </div>
+            <div class="cat-card" data-cat="ninos-ropa" onclick="filterCategory('ninos-ropa')">
+                <span>Ropa Niños</span>
+            </div>
+            <div class="cat-card" data-cat="ninos-calzado" onclick="filterCategory('ninos-calzado')">
+                <span>Calzado Niños</span>
+            </div>
+            <div class="cat-card" data-cat="belleza" onclick="filterCategory('belleza')">
+                <span>Salón</span>
+            </div>
+        </div>
+
+        <div class="search-wrapper">
+            <input type="text" id="searchBar" class="search-input" placeholder="🔍 Buscar producto por nombre..." oninput="searchProducts()">
+        </div>
+
+        <div class="store-grid" id="storeGrid">
+            </div>
+    </main>
+
+    <section class="container location" id="ubicacion">
+            <h2>Visítanos</h2>
+            <div class="loc-grid">
+                <div class="loc-left-col">
+                    <p class="address-text">
+                        Estamos ubicados en una zona accesible de Ahuachapán, listos para brindarte la mejor atención presencial tanto en nuestra tienda de variedades como en los servicios estéticos del Salón de Belleza.
+                        <br><br>
+                        📍 <strong>Dirección:</strong> Ahuachapán, El Salvador. Frente a Laboratorio Clínico.
+                    </p>
+                    <div class="loc-img-container">
+                        <img src="./ld.jpeg" alt="Local Variedades Alejandro">
+                    </div>
+                </div>
+
+                <div class="map-container">
+                    <iframe
+    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d204.36597496470748!2d-89.84771088414551!3d13.927635963784667!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f62970058ff4a73%3A0x1b5da5c70f2d0c93!2sVelasquez%20Tours!5e1!3m2!1ses-419!2ssv!4v1779392733533!5m2!1ses-419!2ssv"
+    height="350" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
             </div>
-            <a href="index.html" class="btn-modern">Ver Tienda Online</a>
-        </header>
+        </section>
 
-        <div class="dashboard-grid">
-            <!-- Lado Izquierdo: Formulario -->
-            <aside class="glass-card">
-                <h3 id="form-title" style="margin-top: 0; margin-bottom: 25px;">Añadir Producto</h3>
-                <form id="productForm" onsubmit="saveProduct(event)">
-                    <input type="hidden" id="edit-index" value="">
-                    <div class="form-group">
-                        <label>Nombre del Producto</label>
-                        <input type="text" id="formName" class="form-control" required placeholder="Ej: Camisa de Seda">
-                    </div>
-                    <div class="form-group">
-                        <label>Precio</label>
-                        <input type="text" id="formPrice" class="form-control" required placeholder="Ej: $25.00">
-                    </div>
-                    <div class="form-group">
-                        <label>Categoría</label>
-                        <select id="formCat" class="form-control">
-                            <option value="electro">Electrodomésticos</option>
-                            <option value="mujer-ropa">Ropa Mujer</option>
-                            <option value="mujer-calzado">Calzado Mujer</option>
-                            <option value="hombre-ropa">Ropa Hombre</option>
-                            <option value="hombre-calzado">Calzado Hombre</option>
-                            <option value="ninos-ropa">Ropa Niños</option>
-                            <option value="ninos-calzado">Calzado Niños</option>
-                            <option value="belleza">Salón de Belleza</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Variantes / Tallas</label>
-                        <input type="text" id="formSizes" class="form-control" placeholder="Ej: S, M, L o Única">
-                    </div>
-                    <div class="form-group">
-                        <label>Imagen del Producto</label>
-                        <input type="file" id="formFile" class="form-control" accept="image/*" onchange="processFile(event)">
-                        <div id="preview-container" style="margin-top: 15px; display: none;">
-                            <img id="img-preview" src="">
-                        </div>
-                    </div>
-                    <button type="submit" id="submit-btn" class="btn-modern" style="width: 100%; justify-content: center; background: var(--rosado);">Guardar Producto</button>
-                    <button type="button" id="cancel-edit" onclick="resetForm()" class="btn-modern" style="width: 100%; justify-content: center; background: #64748b; margin-top: 10px; display: none;">Cancelar Edición</button>
-                </form>
-            </aside>
+    <footer>
+        <p>&copy; 2026 Variedades Alejandro. Todos los derechos reservados.</p>
+        <p>Ahuachapán, El Salvador</p>
+    </footer>
 
-            <!-- Lado Derecho: Inventario -->
-            <main class="glass-card">
-                <div class="search-box">
-                    <input type="text" id="adminSearch" class="form-control" placeholder="🔍 Buscar en el inventario..." oninput="renderAdminList()">
+    <!-- MODAL DETALLE PRODUCTO -->
+    <div class="modal" id="productModal">
+        <div class="modal-content-wide">
+            <button class="close-modal" onclick="closeProductModal()">✕</button>
+            
+            <!-- Columna Izquierda: Imagen -->
+            <div class="modal-left-column">
+                <div class="modal-img-container">
+                    <img id="modalImg" src="" alt="Vista previa">
                 </div>
-                <div class="inventory-list" id="adminItemsList">
-                    <!-- Items dinámicos -->
+            </div>
+            
+            <!-- Columna Derecha: Información y Controles -->
+            <div class="modal-right-column">
+                <h3 id="modalTitle" class="modal-product-title"></h3>
+                <p id="modalPrice" class="modal-product-price"></p>
+                
+                <p class="modal-product-desc">Artículo disponible en Variedades Alejandro. Haz tu consulta directa por WhatsApp.</p>
+                
+                <div class="size-selector" id="sizeSelectorArea">
+                    <span class="size-label" id="variantLabel">TALLAS DISPONIBLES</span>
+                    <div class="size-options" id="sizeOptionsBox"></div>
                 </div>
-            </main>
+
+                <div class="qty-area" id="qtyArea">
+                    <div class="qty-controls">
+                        <button class="qty-btn" onclick="updateQty(-1)">-</button>
+                        <span class="qty-val" id="qtyVal">1</span>
+                        <button class="qty-btn" onclick="updateQty(1)">+</button>
+                    </div>
+                </div>
+
+                <button class="send-wp-final" onclick="sendToWhatsApp()">
+                    <span>Pedir por WhatsApp</span>
+                </button>
+            </div>
         </div>
     </div>
 
     <script>
         let products = JSON.parse(localStorage.getItem('alejandro_products')) || [];
-        let base64ImageStr = "";
 
-        // Función de Login
-        function handleLogin(e) {
-            e.preventDefault();
-            const user = document.getElementById('user').value;
-            const pass = document.getElementById('pass').value;
+        let currentCategory = 'all';
+        let base64ImageStr = ""; 
+        let currentActiveProd = null;
+        let selectedSizeStr = "";
+        let qty = 1;
 
-            if (user === "alejandro" && pass === "123") {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('admin-panel').style.display = 'block';
-                renderAdminList();
-            } else {
-                alert("Usuario o contraseña incorrectos");
-            }
-        }
+        // Renderizar inmediatamente para evitar saltos de scroll al recargar
+        renderStore();
 
-        function processFile(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                base64ImageStr = e.target.result;
-                document.getElementById('img-preview').src = base64ImageStr;
-                document.getElementById('preview-container').style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        }
+        // RENDERIZAR ARTÍCULOS EN LA MALLA
+        function renderStore() {
+            const grid = document.getElementById('storeGrid');
+            grid.innerHTML = '';
 
-        function saveProduct(e) {
-            e.preventDefault();
-            const editIdx = document.getElementById('edit-index').value;
-            
-            const newProduct = {
-                name: document.getElementById('formName').value.trim(),
-                price: document.getElementById('formPrice').value.trim(),
-                cat: document.getElementById('formCat').value,
-                sizes: document.getElementById('formSizes').value.trim(),
-                img: base64ImageStr || (editIdx !== "" ? products[editIdx].img : "")
-            };
+            let filtered = products;
 
-            try {
-                if (editIdx !== "") {
-                    products[editIdx] = newProduct;
-                    alert("Producto actualizado!");
-                } else {
-                    products.push(newProduct);
-                    alert("Producto guardado!");
-                }
-                localStorage.setItem('alejandro_products', JSON.stringify(products));
-            } catch (e) {
-                alert("Error: El almacenamiento está lleno. Intenta subir una imagen más pequeña.");
-                console.error("LocalStorage error:", e);
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(p => p.cat === currentCategory);
             }
 
-            resetForm();
-            renderAdminList();
-        }
-
-        function resetForm() {
-            document.getElementById('productForm').reset();
-            document.getElementById('edit-index').value = "";
-            document.getElementById('form-title').innerText = "Añadir Producto";
-            document.getElementById('submit-btn').innerText = "Guardar Producto";
-            document.getElementById('cancel-edit').style.display = "none";
-            document.getElementById('preview-container').style.display = "none";
-            base64ImageStr = "";
-        }
-
-        function editProduct(idx) {
-            const p = products[idx];
-            document.getElementById('edit-index').value = idx;
-            document.getElementById('formName').value = p.name;
-            document.getElementById('formPrice').value = p.price;
-            document.getElementById('formCat').value = p.cat;
-            document.getElementById('formSizes').value = p.sizes;
-            
-            if (p.img) {
-                document.getElementById('img-preview').src = p.img;
-                document.getElementById('preview-container').style.display = 'block';
+            const query = document.getElementById('searchBar').value.trim().toLowerCase();
+            if (query !== '') {
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(query));
             }
-            
-            document.getElementById('form-title').innerText = "Editando: " + p.name;
-            document.getElementById('submit-btn').innerText = "Actualizar Cambios";
-            document.getElementById('cancel-edit').style.display = "block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function renderAdminList() {
-            const list = document.getElementById('adminItemsList');
-            const query = document.getElementById('adminSearch').value.toLowerCase();
-            list.innerHTML = '';
-
-            const filtered = products.filter(p => p.name.toLowerCase().includes(query));
 
             if (filtered.length === 0) {
-                list.innerHTML = `<div style="text-align:center; padding:40px; color:#64748b;">No se encontraron productos.</div>`;
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px 0;">No se encontraron artículos en esta sección.</p>`;
                 return;
             }
 
-            filtered.forEach((p, originalIdx) => {
-                const idx = products.indexOf(p);
-                const row = document.createElement('div');
-                row.className = 'inventory-item';
-                row.style.animationDelay = `${originalIdx * 0.05}s`;
-                row.innerHTML = `
-                    <img src="${p.img || 'https://via.placeholder.com/50'}" class="item-img">
-                    <div class="item-info">
-                        <span class="item-name">${p.name}</span>
-                        <span class="item-price">${p.price}</span>
+            filtered.forEach((p, index) => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                
+                // Si no hay imagen válida, se genera un recuadro de color amigable automáticamente
+                const itemImg = p.img ? p.img : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" style="background:%23e2e8f0;"><text x="50%" y="55%" font-family="sans-serif" font-size="10" fill="%2364748b" text-anchor="middle">Sin Foto</text></svg>';
+
+                card.innerHTML = `
+                    <div class="prod-img-box">
+                        <img src="${itemImg}" alt="${p.name}">
                     </div>
-                    <div class="action-btns">
-                        <button class="btn-icon btn-edit" onclick="editProduct(${idx})" title="Editar">✏️</button>
-                        <button class="btn-icon btn-del" onclick="deleteProduct(${idx})" title="Eliminar">🗑️</button>
+                    <div class="prod-info">
+                        <h3 class="prod-title">${p.name}</h3>
+                        <div class="prod-meta">
+                            <span class="prod-price">${p.price}</span>
+                            <button class="order-btn" onclick="openProductModal(${products.indexOf(p)})">
+                                🛒 Pedir
+                            </button>
+                        </div>
                     </div>
                 `;
-                list.appendChild(row);
+                grid.appendChild(card);
             });
         }
 
-        function deleteProduct(idx) {
-            if (confirm("¿Eliminar producto?")) {
-                products.splice(idx, 1);
-                localStorage.setItem('alejandro_products', JSON.stringify(products));
-                renderAdminList();
+        function filterCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.querySelector(`[data-cat="${cat}"]`).classList.add('active');
+            renderStore();
+        }
+
+        function searchProducts() {
+            renderStore();
+        }
+
+        // CONTROL DEL MODAL DE DETALLE DE PEDIDO
+        function openProductModal(index) {
+            currentActiveProd = products[index];
+            qty = 1;
+            document.getElementById('qtyVal').innerText = qty;
+
+            document.getElementById('modalTitle').innerText = currentActiveProd.name;
+            document.getElementById('modalPrice').innerText = currentActiveProd.price;
+            
+            const modalImg = document.getElementById('modalImg');
+            modalImg.src = currentActiveProd.img ? currentActiveProd.img : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" style="background:%23e2e8f0;"><text x="50%" y="55%" font-family="sans-serif" font-size="10" fill="%2364748b" text-anchor="middle">Sin Foto</text></svg>';
+
+            // Cambios de textos dinámicos exactos para las dos columnas
+            if (currentActiveProd.cat === 'belleza') {
+                document.getElementById('variantLabel').innerText = "PROGRAMAR CITA";
+                document.getElementById('qtyArea').style.display = 'none';
+            } else if (currentActiveProd.cat === 'electro') {
+                document.getElementById('variantLabel').innerText = "DISEÑOS DISPONIBLES";
+                document.getElementById('qtyArea').style.display = 'flex';
+            } else {
+                document.getElementById('variantLabel').innerText = "TALLAS DISPONIBLES";
+                document.getElementById('qtyArea').style.display = 'flex';
             }
+
+            const box = document.getElementById('sizeOptionsBox');
+            box.innerHTML = '';
+            
+            let variants = [];
+            if (currentActiveProd.sizes && currentActiveProd.sizes.trim() !== '') {
+                variants = currentActiveProd.sizes.split(',').map(v => v.trim());
+            } else {
+                variants = ['Estándar'];
+            }
+
+            selectedSizeStr = variants[0];
+
+            variants.forEach((v, i) => {
+                const btn = document.createElement('button');
+                btn.className = `size-btn ${i === 0 ? 'selected' : ''}`;
+                btn.innerText = v;
+                btn.onclick = () => {
+                    const siblingButtons = box.querySelectorAll('.size-btn');
+                    siblingButtons.forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    selectedSizeStr = v;
+                };
+                box.appendChild(btn);
+            });
+
+            document.getElementById('productModal').classList.add('active');
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').classList.remove('active');
+        }
+
+        function updateQty(val) {
+            qty += val;
+            if (qty < 1) qty = 1;
+            document.getElementById('qtyVal').innerText = qty;
+        }
+
+        // REDIRECCIÓN FORMATEADA A WHATSAPP
+        function sendToWhatsApp() {
+            const phone = "50375037418"; // Tu número de WhatsApp registrado
+            let msg = "";
+
+            if (currentActiveProd.cat === 'belleza') {
+                msg = `¡Hola! 💇‍♀️ Me interesa agendar una cita en Variedades Alejandro:\n\n` +
+                    `✨ *Servicio:* ${currentActiveProd.name}\n` +
+                    `📅 *Tipo:* ${selectedSizeStr}\n` +
+                    `💰 *Precio:* ${currentActiveProd.price}\n\n` +
+                    `¿Podrían brindarme más información?`;
+            } else if (currentActiveProd.cat === 'electro') {
+                msg = `¡Hola! ⚡ Estoy interesado en este electrodoméstico:\n\n` +
+                    `🛒 *Producto:* ${currentActiveProd.name}\n` +
+                    `🎨 *Diseño/Modelo:* ${selectedSizeStr}\n` +
+                    `💰 *Precio:* ${currentActiveProd.price}\n` +
+                    `🔢 *Cantidad:* ${qty}\n\n` +
+                    `¿Está disponible?`;
+            } else if (currentActiveProd.cat.includes('calzado')) { // <-- Esto detecta cualquier tipo de calzado automáticamente
+                msg = `¡Hola! 👟 Me interesa este calzado:\n\n` +
+                    `🛍️ *Producto:* ${currentActiveProd.name}\n` +
+                    `📏 *Talla:* ${selectedSizeStr}\n` +
+                    `💰 *Precio:* ${currentActiveProd.price}\n` +
+                    `🔢 *Cantidad:* ${qty}\n\n` +
+                    `¿Está disponible?`;
+            } else {
+                msg = `¡Hola! 👕 Me interesa este artículo:\n\n` +
+                    `🛍️ *Producto:* ${currentActiveProd.name}\n` +
+                    `📏 *Talla:* ${selectedSizeStr}\n` +
+                    `💰 *Precio:* ${currentActiveProd.price}\n` +
+                    `🔢 *Cantidad:* ${qty}\n\n` +
+                    `¿Está disponible?`;
+            }
+            const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`;
+            window.open(url, '_blank');
         }
     </script>
-    <!-- Netlify Identity -->
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-<script>
-  netlifyIdentity.on("init", user => {
-    if (!user) {
-      netlifyIdentity.open() // Si no hay sesión, pide login
-    }
-  })
-</script>
 </body>
-</html>
 </html>
