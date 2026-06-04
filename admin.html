@@ -354,9 +354,32 @@
             if (!file) return;
             const reader = new FileReader();
             reader.onload = (e) => {
-                base64ImageStr = e.target.result;
-                document.getElementById('img-preview').src = base64ImageStr;
-                document.getElementById('preview-container').style.display = 'block';
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    const max_size = 800; // Resolución máxima para optimizar espacio
+
+                    if (width > height) {
+                        if (width > max_size) {
+                            height *= max_size / width;
+                            width = max_size;
+                        }
+                    } else {
+                        if (height > max_size) {
+                            width *= max_size / height;
+                            height = max_size;
+                        }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                    base64ImageStr = canvas.toDataURL('image/jpeg', 0.7); // Comprime al 70% en JPG
+                    document.getElementById('img-preview').src = base64ImageStr;
+                    document.getElementById('preview-container').style.display = 'block';
+                };
+                img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
@@ -470,5 +493,4 @@
   })
 </script>
 </body>
-</html>
 </html>
