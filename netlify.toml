@@ -1,0 +1,9 @@
+[[redirects]]
+  from = "/admin/*"
+  to = "/.netlify/identity"
+  status = 200
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
