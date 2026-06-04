@@ -258,7 +258,7 @@
                     <input type="password" id="pass" class="form-control" required placeholder="••••••••">
                 </div>
                 <button type="submit" class="btn-modern" style="width: 100%; justify-content: center; background: var(--rosado); margin-top: 10px;">Acceder ahora</button>
-                <p style="margin-top: 20px;"><a href="new.html" style="color: var(--azul); text-decoration: none; font-size: 0.85rem; font-weight: 600;">← Volver a la tienda</a></p>
+                <p style="margin-top: 20px;"><a href="index.html" style="color: var(--azul); text-decoration: none; font-size: 0.85rem; font-weight: 600;">← Volver a la tienda</a></p>
             </form>
         </div>
     </div>
@@ -272,7 +272,7 @@
                     <p style="margin: 5px 0 0; color: #64748b; font-size: 0.9rem;">Gestiona tus productos y servicios</p>
                 </div>
             </div>
-            <a href="new.html" class="btn-modern">Ver Tienda Online</a>
+            <a href="index.html" class="btn-modern">Ver Tienda Online</a>
         </header>
 
         <div class="dashboard-grid">
@@ -373,15 +373,20 @@
                 img: base64ImageStr || (editIdx !== "" ? products[editIdx].img : "")
             };
 
-            if (editIdx !== "") {
-                products[editIdx] = newProduct;
-                alert("Producto actualizado!");
-            } else {
-                products.push(newProduct);
-                alert("Producto guardado!");
+            try {
+                if (editIdx !== "") {
+                    products[editIdx] = newProduct;
+                    alert("Producto actualizado!");
+                } else {
+                    products.push(newProduct);
+                    alert("Producto guardado!");
+                }
+                localStorage.setItem('alejandro_products', JSON.stringify(products));
+            } catch (e) {
+                alert("Error: El almacenamiento está lleno. Intenta subir una imagen más pequeña.");
+                console.error("LocalStorage error:", e);
             }
 
-            localStorage.setItem('alejandro_products', JSON.stringify(products));
             resetForm();
             renderAdminList();
         }
@@ -455,5 +460,15 @@
             }
         }
     </script>
+    <!-- Netlify Identity -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  netlifyIdentity.on("init", user => {
+    if (!user) {
+      netlifyIdentity.open() // Si no hay sesión, pide login
+    }
+  })
+</script>
 </body>
+</html>
 </html>
