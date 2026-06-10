@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variedades Alejandro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css">
+
+</head>
+<body>
+
+    <header class="header">
+        <div class="nav-container">
+            <a href="#" class="logo-area">
+                <img src="img/sflogoAV.png" alt="Logo Alejandro" onerror="this.style.display='none';">
+                <div class="logo-text">
+                    <span class="logo-title">Alejandro</span>
+                    <span class="logo-subtitle">Variedades & Salón</span>
+                </div>
+            </a>
+
+            <input type="checkbox" id="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+
+           <ul class="nav-menu">
+                <li><a href="#" class="nav-link" onclick="document.getElementById('menu-toggle').checked = false">Inicio</a></li>
+                <li><a href="#catalogo" class="nav-link" onclick="document.getElementById('menu-toggle').checked = false">Catálogo</a></li>
+                <li><a href="#ubicacion" class="nav-link" onclick="document.getElementById('menu-toggle').checked = false">Ubicación</a></li>
+                
+            </ul>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>VARIEDADES ALEJANDRO</h1>
+            <p>Explora lo que deseas en nuestra tienda online.</p>
+        </div>
+    </section>
+
+    <main class="container" id="catalogo">
+        <div class="section-title">
+            <h2>Catálogo</h2>
+            <p>Filtrado por categorías para una búsqueda más cómoda</p>
+        </div>
+
+        <div class="categories-grid">
+            <div class="cat-card active" data-cat="all" onclick="filterCategory('all')">
+                <span>Todo</span>
+            </div>
+            <div class="cat-card" data-cat="electro" onclick="filterCategory('electro')">
+                <span>Electrodomésticos</span>
+            </div>
+            <div class="cat-card" data-cat="mujer-ropa" onclick="filterCategory('mujer-ropa')">
+                <span>Ropa Mujer</span>
+            </div>
+            <div class="cat-card" data-cat="mujer-calzado" onclick="filterCategory('mujer-calzado')">
+                <span>Calzado Mujer</span>
+            </div>
+            <div class="cat-card" data-cat="hombre-ropa" onclick="filterCategory('hombre-ropa')">
+                <span>Ropa Hombre</span>
+            </div>
+            <div class="cat-card" data-cat="hombre-calzado" onclick="filterCategory('hombre-calzado')">
+                <span>Calzado Hombre</span>
+            </div>
+            <div class="cat-card" data-cat="ninos-ropa" onclick="filterCategory('ninos-ropa')">
+                <span>Ropa Niños</span>
+            </div>
+            <div class="cat-card" data-cat="ninos-calzado" onclick="filterCategory('ninos-calzado')">
+                <span>Calzado Niños</span>
+            </div>
+            <div class="cat-card" data-cat="belleza" onclick="filterCategory('belleza')">
+                <span>Salón</span>
+            </div>
+        </div>
+
+        <div class="search-wrapper">
+            <input type="text" id="searchBar" class="search-input" placeholder="🔍 Buscar producto por nombre..." oninput="searchProducts()">
+        </div>
+
+        <div class="store-grid" id="storeGrid">
+            </div>
+    </main>
+
+    <section class="container location" id="ubicacion">
+            <h2>Visítanos</h2>
+            <div class="loc-grid">
+                <div class="loc-left-col">
+                    <p class="address-text">
+                        Estamos ubicados en una zona accesible de Ahuachapán, listos para brindarte la mejor atención presencial tanto en nuestra tienda de variedades como en los servicios estéticos del Salón de Belleza.
+                        <br><br>
+                        📍 <strong>Dirección:</strong> Ahuachapán, El Salvador. Frente a Laboratorio Clínico.
+                    </p>
+                    <div class="loc-img-container">
+                        <img src="img/ldd.png" alt="Local Variedades Alejandro">
+                    </div>
+                </div>
+
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d204.36597496470748!2d-89.84771088414551!3d13.927635963784667!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f62970058ff4a73%3A0x1b5da5c70f2d0c93!2sVelasquez%20Tours!5e1!3m2!1ses-419!2ssv!4v1779392733533!5m2!1ses-419!2ssv"
+                           height="350" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </section>
+
+    <footer>
+        <p>&copy; 2026 Variedades Alejandro. Todos los derechos reservados.</p>
+        <p>Ahuachapán, El Salvador</p>
+    </footer>
+
+    <!-- MODAL DETALLE PRODUCTO -->
+    <div class="modal" id="productModal">
+        <div class="modal-content-wide">
+            <button class="close-modal" onclick="closeProductModal()">✕</button>
+            
+            <!-- Columna Izquierda: Imagen -->
+            <div class="modal-left-column">
+                <div class="modal-img-container">
+                    <img id="modalImg" src="" alt="Vista previa">
+                </div>
+            </div>
+            
+            <!-- Columna Derecha: Información y Controles -->
+            <div class="modal-right-column">
+                <h3 id="modalTitle" class="modal-product-title"></h3>
+                <p id="modalPrice" class="modal-product-price"></p>
+                
+                <p class="modal-product-desc">Artículo disponible en Variedades Alejandro. Haz tu consulta directa por WhatsApp.</p>
+                
+                <div class="size-selector" id="sizeSelectorArea">
+                    <span class="size-label" id="variantLabel">TALLAS DISPONIBLES</span>
+                    <div class="size-options" id="sizeOptionsBox"></div>
+                </div>
+
+                <div class="qty-area" id="qtyArea">
+                    <div class="qty-controls">
+                        <button class="qty-btn" onclick="updateQty(-1)">-</button>
+                        <span class="qty-val" id="qtyVal">1</span>
+                        <button class="qty-btn" onclick="updateQty(1)">+</button>
+                    </div>
+                </div>
+
+                <button class="send-wp-final" onclick="sendToWhatsApp()">
+                    <span>Pedir por WhatsApp</span>
+                </button>
+            </div>
+        </div>
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración - Variedades Alejandro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+    <div class="admin-wrapper" id="admin-panel">
+        <header class="dashboard-header">
+            <div class="header-left">
+                <img src="img/sflogoAV.png" alt="Logo" class="admin-logo">
+                <div class="header-titles">
+                    <h1>Dashboard de Alejandro</h1>
+                    <p>Gestiona productos y servicios</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="index.html" class="btn-modern">Ver Tienda Online</a>
+                <button onclick="logout()" class="btn-modern btn-danger">Cerrar Sesión</button>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Lado Izquierdo: Formulario -->
+            <aside class="glass-card">
+                <h3 id="form-title" class="form-title">Añadir Producto</h3>
+                <form id="productForm" onsubmit="saveProduct(event)">
+                    <input type="hidden" id="edit-index" value="">
+                    <div class="form-group">
+                        <label>Nombre del Producto</label>
+                        <input type="text" id="formName" class="form-control" required placeholder="Ej: Camisa de Seda">
+                    </div>
+                    <div class="form-group">
+                        <label>Precio</label>
+                        <input type="text" id="formPrice" class="form-control" required placeholder="Ej: $25.00">
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select id="formCat" class="form-control">
+                            <option value="electro">Electrodomésticos</option>
+                            <option value="mujer-ropa">Ropa Mujer</option>
+                            <option value="mujer-calzado">Calzado Mujer</option>
+                            <option value="hombre-ropa">Ropa Hombre</option>
+                            <option value="hombre-calzado">Calzado Hombre</option>
+                            <option value="ninos-ropa">Ropa Niños</option>
+                            <option value="ninos-calzado">Calzado Niños</option>
+                            <option value="belleza">Salón de Belleza</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Variantes / Tallas</label>
+                        <input type="text" id="formSizes" class="form-control" placeholder="Ej: S, M, L o Única">
+                    </div>
+                    <div class="form-group">
+                        <label>Stock disponible</label>
+                        <input type="number" id="formStock" class="form-control" min="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Imagen del Producto</label>
+                        <input type="file" id="formFile" class="form-control" accept="image/*" onchange="processFile(event)">
+                        <div id="preview-container" class="preview-container">
+                            <img id="img-preview" src="">
+                        </div>
+                    </div>
+                    <button type="submit" id="submit-btn" class="btn-modern btn-save">Guardar Producto</button>
+                    <button type="button" id="cancel-edit" onclick="resetForm()" class="btn-modern btn-secondary btn-cancel">Cancelar Edición</button>
+                </form>
+            </aside>
+
+            <!-- Lado Derecho: Inventario -->
+            <main class="glass-card">
+                <div class="search-box">
+                    <input type="text" id="adminSearch" class="form-control" placeholder="🔍 Buscar en el inventario..." oninput="renderAdminList()">
+                </div>
+                <div class="inventory-list" id="adminItemsList">
+                    <!-- Items dinámicos -->
+                </div>
+            </main>
+        </div>
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/supabase.js"></script>
+
+<script src="js/auth.js"></script>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
