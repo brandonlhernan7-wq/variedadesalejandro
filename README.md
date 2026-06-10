@@ -1,2 +1,10 @@
-# variedadesalejandro
-Un sitio web de venta de productos varios
+# GTVA
+
+Catálogo web para Variedades Alejandro.
+
+Tecnologías:
+- HTML
+- CSS
+- JavaScript
+- Supabase
+- Vercel
