@@ -75,6 +75,8 @@ if (performance.navigation.type === 1 || window.performance.getEntriesByType("na
                 // Si no hay imagen válida, se genera un recuadro de color amigable automáticamente
                 const itemImg = p.imagen ? p.imagen : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" style="background:%23e2e8f0;"><text x="50%" y="55%" font-family="sans-serif" font-size="10" fill="%2364748b" text-anchor="middle">Sin Foto</text></svg>';
 
+                const btnText = p.categoria === 'belleza' ? 'Ver servicio →' : 'Ver detalles →';
+
                 card.innerHTML = `
     <div class="prod-img-box">
         <img src="${itemImg}" alt="${p.nombre}">
@@ -86,7 +88,7 @@ if (performance.navigation.type === 1 || window.performance.getEntriesByType("na
         </div>
         <!-- 💡 EL BOTÓN DEBE QUEDAR AQUÍ, AFUERA DE PROD-META PARA QUE PUEDA BAJAR -->
         <button class="order-btn" onclick="openProductModal(${products.indexOf(p)})">
-            🛒 Ver detalles
+            ${btnText}
         </button>
     </div>
 `;
@@ -235,28 +237,28 @@ if (performance.navigation.type === 1 || window.performance.getEntriesByType("na
             let msg = "";
 
             if (currentActiveProd.categoria === 'belleza') {
-                msg = `¡Hola! 💇‍♀️ Me interesa agendar una cita en Variedades Alejandro:\n\n` +
+                msg = `¡Hola! ✨ Me interesa agendar una cita en Variedades Alejandro:\n\n` +
                     `✨ *Servicio:* ${currentActiveProd.nombre}\n` +
                     `📅 *Tipo:* ${selectedSizeStr}\n` +
                     `💰 *Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n\n` +
                     `¡Podrían brindarme más información!`;
             } else if (currentActiveProd.categoria === 'electro') {
-                msg = `¡Hola! ⚡ Estoy interesado en este electrodoméstico:\n\n` +
-                    `🛒 *Producto:* ${currentActiveProd.nombre}\n` +
+                msg = `¡Hola! 🛍️🔌 Estoy interesado en este electrodoméstico:\n\n` +
+                    `⚡ *Producto:* ${currentActiveProd.nombre}\n` +
                     `🎨 *Diseño/Modelo:* ${selectedSizeStr}\n` +
                     `💰 *Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
                     `🔢 *Cantidad:* ${qty}\n\n` +
                     `¡Podrían brindarme más información!`;
             } else if (currentActiveProd.categoria.includes('calzado')) { 
-                msg = `¡Hola! 👟 Me interesa este calzado:\n\n` +
-                    `🛍️ *Producto:* ${currentActiveProd.nombre}\n` +
+                msg = `¡Hola! 🛍️👟 Me interesa este calzado:\n\n` +
+                    `👟 *Producto:* ${currentActiveProd.nombre}\n` +
                     `📏 *Talla:* ${selectedSizeStr}\n` +
                     `💰 *Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
                     `🔢 *Cantidad:* ${qty}\n\n` +
                     `¡Podrían brindarme más información!`;
             } else {
-                msg = `¡Hola! 👕 Me interesa este artículo:\n\n` +
-                    `🛍️ *Producto:* ${currentActiveProd.nombre}\n` +
+                msg = `¡Hola! 🛍️👕 Me interesa este artículo:\n\n` +
+                    `🏷️ *Producto:* ${currentActiveProd.nombre}\n` +
                     `📏 *Talla:* ${selectedSizeStr}\n` +
                     `💰 *Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
                     `🔢 *Cantidad:* ${qty}\n\n` +
