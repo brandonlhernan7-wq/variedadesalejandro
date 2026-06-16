@@ -14,6 +14,8 @@
 
 * {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none;
 }
 
 html {
@@ -630,6 +632,16 @@ body {
     align-items: center;
     justify-content: center;
     gap: 10px;
+}
+
+.send-wp-final:active {
+    transform: scale(0.96); /* Efecto de presión inmediata */
+    background-color: var(--whatsapp) !important; /* Evita cambios de color extraños */
+    transition: none !important; /* Respuesta instantánea al toque */
+}
+
+.send-wp-final:focus {
+    outline: none;
 }
 
 /* ==========================================================================
