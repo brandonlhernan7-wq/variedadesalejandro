@@ -198,7 +198,7 @@ body {
 .hero {
     height: 70vh;
     min-height: 500px;
-    background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.7)), url('localAV.png') center/cover no-repeat;
+    background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.7)), url('../img/localAV.png') center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -417,16 +417,18 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(5px);
+    background: rgba(15, 23, 42, 0.75); 
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 2000;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.25s ease;
     padding: 20px;
+    will-change: opacity;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
 }
@@ -488,6 +490,8 @@ body {
     gap: 40px;
     max-height: 90vh;
     overflow-y: auto;
+    will-change: transform;
+    transform: translateZ(0);
 }
 
 .modal-left-column {
@@ -634,15 +638,19 @@ body {
     align-items: center;
     justify-content: center;
     gap: 10px;
+    transform: translateZ(0); 
+    will-change: background-color;
 }
 
 .send-wp-final:focus, 
 .send-wp-final:active,
-.send-wp-final:visited {
+.send-wp-final:hover {
     outline: none !important;
-    background-color: #25d366 !important; /* Mantén su color verde fijo sin alterarse */
+    background-color: #25d366 !important; 
     box-shadow: none !important;
-    transition: none !important; /* Quita transiciones para que no parpadee al congelarse */
+    transform: none !important;
+    transition: none !important;
+    -webkit-tap-highlight-color: transparent !important;
 }
 
 /* ==========================================================================
