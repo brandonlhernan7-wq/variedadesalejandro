@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Variedades Alejandro</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="css/index.css">
 
 </head>
 <body>
@@ -13,7 +13,7 @@
     <header class="header">
         <div class="nav-container">
             <a href="#" class="logo-area">
-                <img src="sflogoAV.png" alt="Logo Alejandro" onerror="this.style.display='none';">
+                <img src="img/sflogoAV.png" alt="Logo Alejandro" onerror="this.style.display='none';">
                 <div class="logo-text">
                     <span class="logo-title">Alejandro</span>
                     <span class="logo-subtitle">Variedades & Salón</span>
@@ -97,14 +97,14 @@
                         📍 <strong>Dirección:</strong> Ahuachapán, El Salvador. Frente a Laboratorio Clínico.
                     </p>
                     <div class="loc-img-container">
-                        <img src="ldd.png" alt="Local Variedades Alejandro">
+                        <img src="img/ldd.png" alt="Local Variedades Alejandro">
                     </div>
                 </div>
 
                 <div class="map-container">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d204.36597496470748!2d-89.84771088414551!3d13.927635963784667!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f62970058ff4a73%3A0x1b5da5c70f2d0c93!2sVelasquez%20Tours!5e1!3m2!1ses-419!2ssv!4v1779392733533!5m2!1ses-419!2ssv"
-                           height="350" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                </div>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15494.372132371946!2d-89.85497475!3d13.923419!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6297072e90e78f%3A0x7d0a2d59a7ff77f8!2sAhuachap%C3%A1n!5e0!3m2!1ses!2ssv!4v1718490000000!5m2!1ses!2ssv"
+            height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+             </div>
             </div>
         </section>
 
@@ -115,44 +115,42 @@
 
     <!-- MODAL DETALLE PRODUCTO -->
     <div class="modal" id="productModal">
-        <div class="modal-content-wide">
-            <button class="close-modal" onclick="closeProductModal()">✕</button>
-            
-            <!-- Columna Izquierda: Imagen -->
-            <div class="modal-left-column">
-                <div class="modal-img-container">
-                    <img id="modalImg" src="" alt="Vista previa">
-                </div>
-            </div>
-            
-            <!-- Columna Derecha: Información y Controles -->
-            <div class="modal-right-column">
-                <h3 id="modalTitle" class="modal-product-title"></h3>
-                <p id="modalPrice" class="modal-product-price"></p>
-                
-                <p class="modal-product-desc">Artículo disponible en Variedades Alejandro. Haz tu consulta directa por WhatsApp.</p>
-                
-                <div class="size-selector" id="sizeSelectorArea">
-                    <span class="size-label" id="variantLabel">TALLAS DISPONIBLES</span>
-                    <div class="size-options" id="sizeOptionsBox"></div>
-                </div>
-
-                <div class="qty-area" id="qtyArea">
-                    <div class="qty-controls">
-                        <button class="qty-btn" onclick="updateQty(-1)">-</button>
-                        <span class="qty-val" id="qtyVal">1</span>
-                        <button class="qty-btn" onclick="updateQty(1)">+</button>
-                    </div>
-                </div>
-
-                <button class="send-wp-final" onclick="sendToWhatsApp()">
-                    <span>Pedir por WhatsApp</span>
-                </button>
+    <div class="modal-content-wide">
+        <button type="button" class="close-modal" onclick="closeProductModal()">✕</button>
+        
+        <div class="modal-left-column">
+            <div class="modal-img-container">
+                <img id="modalImg" src="" alt="Vista previa">
             </div>
         </div>
+        
+        <div class="modal-right-column">
+            <h3 id="modalTitle" class="modal-product-title"></h3>
+            <p id="modalPrice" class="modal-product-price"></p>
+            
+            <p class="modal-product-desc">Artículo disponible en Variedades Alejandro. Haz tu consulta directa por WhatsApp.</p>
+            
+            <div class="size-selector" id="sizeSelectorArea">
+                <span class="size-label" id="variantLabel">TALLAS DISPONIBLES</span>
+                <div class="size-options" id="sizeOptionsBox"></div>
+            </div>
+
+            <div class="qty-area" id="qtyArea">
+                <div class="qty-controls">
+                    <button type="button" class="qty-btn" onclick="updateQty(-1)">-</button>
+                    <span class="qty-val" id="qtyVal">1</span>
+                    <button type="button" class="qty-btn" onclick="updateQty(1)">+</button>
+                </div>
+            </div>
+
+            <button type="button" class="send-wp-final" onclick="sendToWhatsApp()">
+                <span>Pedir por WhatsApp</span>
+            </button>
+        </div>
     </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>
-<script src="index.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/index.js"></script>
 </body>
 </html>
