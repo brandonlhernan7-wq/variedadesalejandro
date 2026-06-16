@@ -427,6 +427,8 @@ body {
     pointer-events: none;
     transition: opacity 0.3s ease;
     padding: 20px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .modal.active {
@@ -634,14 +636,13 @@ body {
     gap: 10px;
 }
 
-.send-wp-final:active {
-    transform: scale(0.96); /* Efecto de presión inmediata */
-    background-color: var(--whatsapp) !important; /* Evita cambios de color extraños */
-    transition: none !important; /* Respuesta instantánea al toque */
-}
-
-.send-wp-final:focus {
-    outline: none;
+.send-wp-final:focus, 
+.send-wp-final:active,
+.send-wp-final:visited {
+    outline: none !important;
+    background-color: #25d366 !important; /* Mantén su color verde fijo sin alterarse */
+    box-shadow: none !important;
+    transition: none !important; /* Quita transiciones para que no parpadee al congelarse */
 }
 
 /* ==========================================================================
