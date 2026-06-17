@@ -175,6 +175,14 @@ function openProductModal(index) {
         }
         document.getElementById('variantLabel').innerText = "TALLAS DISPONIBLES";
         modalDesc.innerText = "Calzado disponible en Variedades Alejandro. Consulta tallas y disponibilidad por WhatsApp.";
+    } else if (currentActiveProd.categoria === 'corporal') {
+        if (stock <= 0) {
+            document.getElementById('qtyArea').style.display = 'none';
+        } else {
+            document.getElementById('qtyArea').style.display = 'flex';
+        }
+        document.getElementById('variantLabel').innerText = "TONOS DISPONIBLES";
+        modalDesc.innerText = "Producto corporal disponible en Variedades Alejandro. Consulta tonos y disponibilidad por WhatsApp.";
     } else {
         if (stock <= 0) {
             document.getElementById('qtyArea').style.display = 'none';
