@@ -254,6 +254,13 @@ function sendToWhatsApp() {
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
               `¡Podrían brindarme más información!`;
+        } else if (currentActiveProd.categoria === 'corporal') {
+        msg = `¡Hola! Me interesa este producto de cuidado personal:\n\n` +
+              `*Producto:* ${currentActiveProd.nombre}\n` +
+              `*Diseño/Tono:* ${selectedSizeStr}\n` +
+              `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
+              `*Cantidad:* ${qty}\n\n` +
+              `¡Podrían brindarme más información!`;
     } else if (currentActiveProd.categoria.includes('calzado')) { 
         msg = `¡Hola! Me interesa este calzado:\n\n` +
               `*Producto:* ${currentActiveProd.nombre}\n` +
