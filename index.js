@@ -158,7 +158,7 @@ function openProductModal(index) {
     if (currentActiveProd.categoria === 'belleza') {
         document.getElementById('variantLabel').innerText = "PROGRAMAR CITA";
         document.getElementById('qtyArea').style.display = 'none';
-        modalDesc.innerText = "Servicio disponible en Variedades Alejandro. Agenda tu cita o consulta por WhatsApp.";
+        modalDesc.innerText = "Servicio disponible en Variedades Alejandro. Agenda tu cita, consulta por WhatsApp.";
     } else if (currentActiveProd.categoria === 'electro') {
         if (stock <= 0) {
             document.getElementById('qtyArea').style.display = 'none';
@@ -250,14 +250,14 @@ function sendToWhatsApp() {
     } else if (currentActiveProd.categoria === 'electro') {
         msg = `¡Hola! Estoy interesado en este electrodoméstico:\n\n` +
               `*Producto:* ${currentActiveProd.nombre}\n` +
-              `*Diseño/Modelo:* ${selectedSizeStr}\n` +
+              `*Diseño:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
               `¡Podrían brindarme más información!`;
-        } else if (currentActiveProd.categoria === 'corporal') {
+    } else if (currentActiveProd.categoria === 'corporal') {
         msg = `¡Hola! Me interesa este producto de cuidado personal:\n\n` +
               `*Producto:* ${currentActiveProd.nombre}\n` +
-              `*Diseño/Tono:* ${selectedSizeStr}\n` +
+              `*Tono:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
               `¡Podrían brindarme más información!`;
@@ -276,7 +276,7 @@ function sendToWhatsApp() {
               `*Cantidad:* ${qty}\n\n` +
               `¡Podrían brindarme más información!`;
     }
-    
+
     // Al usar api.whatsapp con target _blank el navegador delega de inmediato el control al OS móvil
     const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
