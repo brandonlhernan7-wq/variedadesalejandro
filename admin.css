@@ -113,6 +113,16 @@ body {
     box-shadow: var(--sombra);
 }
 
+.glass-card.modo-edicion {
+    background: var(--azul);
+    color: var(--blanco);
+}
+
+.glass-card.modo-edicion .form-title,
+.glass-card.modo-edicion .form-group label {
+    color: var(--blanco);
+}
+
 /* --- BOTONES Y COMPONENTES --- */
 .btn-modern {
     text-decoration: none;
