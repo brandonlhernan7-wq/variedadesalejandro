@@ -1,4 +1,4 @@
-        /* --- ESTADO GLOBAL --- */
+/* --- ESTADO GLOBAL --- */
         let products = [];
         let selectedFile = null;
         let base64Preview = ""; 
@@ -101,6 +101,7 @@
 
         /* --- GESTIÓN DEL FORMULARIO --- */
         function resetForm() {
+            document.getElementById('productForm').closest('.glass-card').classList.remove('modo-edicion');
             document.getElementById('productForm').reset();
             document.getElementById('edit-index').value = "";
             document.getElementById('form-title').innerText = "Añadir Producto";
@@ -119,6 +120,8 @@
                 console.error("No se encontró el producto localmente con ID:", id);
                 return;
             }
+
+            document.getElementById('productForm').closest('.glass-card').classList.add('modo-edicion');
 
             document.getElementById('edit-index').value = p.id;
             document.getElementById('formName').value = p.nombre;
