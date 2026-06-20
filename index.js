@@ -241,61 +241,94 @@ function sendToWhatsApp() {
     const phone = "50375037418"; 
     let msg = "";
 
-    // 1. SALÓN DE BELLEZA (Servicios / Citas)
-    if (currentActiveProd.categoria === 'belleza') {
-        msg = `¡Hola! Me interesa agendar una cita en el Salón de Variedades Alejandro:\n\n` +
-              `*Servicio:* ${currentActiveProd.nombre}\n` +
-              `*Tipo:* ${selectedSizeStr}\n` +
-              `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n\n` +
-              `¡Podrían brindarme más información para agendar!`;
-
-    // 2. PRODUCTOS DE BELLEZA / CORPORAL (Tonos / Variantes)
-    } else if (currentActiveProd.categoria === 'corporal') {
-        msg = `¡Hola! Me interesa este producto de belleza en Variedades Alejandro:\n\n` +
-              `*Producto:* ${currentActiveProd.nombre}\n` +
-              `*Tono/Variante:* ${selectedSizeStr}\n` +
-              `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
-              `*Cantidad:* ${qty}\n\n` +
-              `¡Podrían brindarme más detalles!`;
-
-    // 3. ELECTRODOMÉSTICOS (Diseños / Modelos)
-    } else if (currentActiveProd.categoria === 'electro') {
-        msg = `¡Hola! Estoy interesado en este electrodoméstico de Variedades Alejandro:\n\n` +
-              `*Producto:* ${currentActiveProd.nombre}\n` +
-              `*Diseño:* ${selectedSizeStr}\n` +
-              `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
-              `*Cantidad:* ${qty}\n\n` +
-              `¿Tienen disponible para entrega inmediata?`;
-
-    // 4. CALZADO (Mujer y Niño -> Tallas de calzado)
-    } else if (currentActiveProd.categoria === 'mujer-calzado' || currentActiveProd.categoria === 'ninos-calzado') { 
-        // Nota: En tu HTML "ninos-calzado" muestra "Juguetes", si son juguetes usará la variante. 
-        // Si es calzado mantendrá la etiqueta de Talla perfecta.
-        const etiquetaCalzado = currentActiveProd.categoria === 'ninos-calzado' ? 'Estilo/Variante' : 'Talla';
-        msg = `¡Hola! Me interesa este artículo de la sección de calzado/juguetes:\n\n` +
-              `*Artículo:* ${currentActiveProd.nombre}\n` +
-              `*${etiquetaCalzado}:* ${selectedSizeStr}\n` +
-              `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
-              `*Cantidad:* ${qty}\n\n` +
-              `¡Me gustaría confirmar disponibilidad!`;
-
-    // 5. ROPA (Mujer, Hombre, Niños -> Tallas de ropa)
-    } else if (currentActiveProd.categoria === 'mujer-ropa' || currentActiveProd.categoria === 'hombre-ropa' || currentActiveProd.categoria === 'ninos-ropa') {
-        msg = `¡Hola! Me interesa esta prenda de ropa en Variedades Alejandro:\n\n` +
+    // 1. ROPA MUJER (Talla)
+    if (currentActiveProd.categoria === 'mujer-ropa') {
+        msg = `¡Hola! Me interesa esta prenda para dama en Variedades Alejandro:\n\n` +
               `*Prenda:* ${currentActiveProd.nombre}\n` +
               `*Talla:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
-              `¡Quiero confirmar si la tienen en existencia!`;
+              `¿Tienen disponible en existencia?`;
 
-    // 6. HOGAR Y COMODIDADES / CUALQUIER OTRO (Categoría "hombre-calzado" en el HTML que dice Hogar)
+    // 2. ROPA HOMBRE (Talla)
+    } else if (currentActiveProd.categoria === 'hombre-ropa') {
+        msg = `¡Hola! Me interesa esta prenda para caballero en Variedades Alejandro:\n\n` +
+              `*Prenda:* ${currentActiveProd.nombre}\n` +
+              `*Talla:* ${selectedSizeStr}\n` +
+              `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
+              `*Cantidad:* ${qty}\n\n` +
+              `¿Tienen disponible este modelo?`;
+
+    // 3. CALZADO (Talla de zapato)
+    } else if (currentActiveProd.categoria === 'mujer-calzado') {
+        msg = `¡Hola! Me interesa este calzado en Variedades Alejandro:\n\n` +
+              `*Estilo:* ${currentActiveProd.nombre}\n` +
+              `*Talla:* ${selectedSizeStr}\n` +
+              `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
+              `*Cantidad:* ${qty}\n\n` +
+              `¿Tienen disponible esta numeración?`;
+
+    // 4. ROPA NIÑOS (Talla / Edad)
+    } else if (currentActiveProd.categoria === 'ninos-ropa') {
+        msg = `¡Hola! Me interesa esta prenda infantil en Variedades Alejandro:\n\n` +
+              `*Artículo:* ${currentActiveProd.nombre}\n` +
+              `*Talla/Edad:* ${selectedSizeStr}\n` +
+              `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
+              `*Cantidad:* ${qty}\n\n` +
+              `¿Tienen disponible para entrega inmediata?`;
+
+    // 5. JUGUETES (Estilo o Personaje)
+    } else if (currentActiveProd.categoria === 'ninos-calzado') { 
+        msg = `¡Hola! Me interesa este juguete en Variedades Alejandro:\n\n` +
+              `*Juguete:* ${currentActiveProd.nombre}\n` +
+              `*Estilo/Variante:* ${selectedSizeStr}\n` +
+              `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
+              `*Cantidad:* ${qty}\n\n` +
+              `¿Tienen este disponible en tienda?`;
+
+    // 6. HOGAR Y COMODIDADES (Diseño o Modelo)
+    } else if (currentActiveProd.categoria === 'hombre-calzado') {
+        msg = `¡Hola! Me interesa este artículo para el hogar en Variedades Alejandro:\n\n` +
+              `*Producto:* ${currentActiveProd.nombre}\n` +
+              `*Modelo/Diseño:* ${selectedSizeStr}\n` +
+              `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
+              `*Cantidad:* ${qty}\n\n` +
+              `¿Podrían darme más información sobre este artículo?`;
+
+    // 7. PRODUCTOS DE BELLEZA (Tono, Color o Tipo)
+    } else if (currentActiveProd.categoria === 'corporal') {
+        msg = `¡Hola! Me interesa este producto cosmético/belleza en Variedades Alejandro:\n\n` +
+              `*Producto:* ${currentActiveProd.nombre}\n` +
+              `*Tono/Variante:* ${selectedSizeStr}\n` +
+              `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
+              `*Cantidad:* ${qty}\n\n` +
+              `¿Tienen existencias disponibles de este tono?`;
+
+    // 8. SALÓN DE BELLEZA (Citas / Servicios)
+    } else if (currentActiveProd.categoria === 'belleza') {
+        msg = `¡Hola! Me interesa reservar o consultar un servicio del Salón de Variedades Alejandro:\n\n` +
+              `*Servicio:* ${currentActiveProd.nombre}\n` +
+              `*Opción:* ${selectedSizeStr}\n` +
+              `*Precio desde:* $${Number(currentActiveProd.precio).toFixed(2)}\n\n` +
+              `¿Qué horarios tienen disponibles para agendar una cita?`;
+
+    // 9. ELECTRODOMÉSTICOS (Modelo / Capacidad)
+    } else if (currentActiveProd.categoria === 'electro') {
+        msg = `¡Hola! Estoy interesado en este electrodoméstico de Variedades Alejandro:\n\n` +
+              `*Aparato:* ${currentActiveProd.nombre}\n` +
+              `*Capacidad/Diseño:* ${selectedSizeStr}\n` +
+              `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
+              `*Cantidad:* ${qty}\n\n` +
+              `¿Cuenta con garantía? Me interesa comprarlo.`;
+
+    // POR SI ACASO (Categoría extra o error)
     } else {
-        msg = `¡Hola! Me interesa este producto para el hogar / artículo:\n\n` +
+        msg = `¡Hola! Me interesa este artículo de Variedades Alejandro:\n\n` +
               `*Producto:* ${currentActiveProd.nombre}\n` +
               `*Variante:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
-              `¡Podrían brindarme más información!`;
+              `¡Deseo consultar la disponibilidad!`;
     }
 
     const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`;
