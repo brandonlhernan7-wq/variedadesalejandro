@@ -1,9 +1,3 @@
-// Forzar el redireccionamiento al inicio absoluto al presionar F5 / Recargar
-if (performance.navigation.type === 1 || window.performance.getEntriesByType("navigation")[0].type === "reload") {
-    // Esto limpia la ruta actual y fuerza a cargar la raíz de la aplicación
-    window.location.href = window.location.origin + window.location.pathname;
-}
-
 /* ==========================================================================
    1. ESTADO GLOBAL
    ========================================================================== */
@@ -16,39 +10,40 @@ let qty = 1;
 /* ==========================================================================
    2. EVENTOS DE CARGA E INICIALIZACIÓN
    ========================================================================== */
-window.addEventListener('DOMContentLoaded', () => {
-    window.location.hash = '#inicio';
-    window.scrollTo(0, 0);
-});
-
 async function cargarProductos() {
     const { data, error } = await supabaseClient
         .from('productos')
         .select('*')
-        .eq('activo', true)
-        .order('id', { ascending: true });
+        .eq('activo', true); 
 
     if (error) {
         console.error("Error cargando productos:", error);
     } else {
-        products = data;
+        // Mezcla el array de productos de forma aleatoria
+        products = data ? data.sort(() => Math.random() - 0.5) : [];
         renderStore();
     }
 }
 
-// Sincronización en tiempo real
-supabaseClient.channel('custom-all-channel')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'productos' }, () => {
-        cargarProductos();
-    }).subscribe();
+// Sincronización en tiempo real con Supabase
+if (typeof supabaseClient !== 'undefined') {
+    supabaseClient.channel('custom-all-channel')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'productos' }, () => {
+            cargarProductos();
+        }).subscribe();
+}
 
-cargarProductos();
+// Carga inicial segura
+document.addEventListener('DOMContentLoaded', () => {
+    cargarProductos();
+});
 
 /* ==========================================================================
    3. FUNCIONES DEL CATÁLOGO (RENDER, FILTROS, BÚSQUEDA)
    ========================================================================== */
 function renderStore() {
     const grid = document.getElementById('storeGrid');
+    if (!grid) return;
     grid.innerHTML = '';
 
     let filtered = products;
@@ -57,7 +52,8 @@ function renderStore() {
         filtered = filtered.filter(p => p.categoria === currentCategory);
     }
 
-    const query = document.getElementById('searchBar').value.trim().toLowerCase();
+    const searchBar = document.getElementById('searchBar');
+    const query = searchBar ? searchBar.value.trim().toLowerCase() : '';
     if (query !== '') {
         filtered = filtered.filter(p => p.nombre.toLowerCase().includes(query));
     }
@@ -67,16 +63,15 @@ function renderStore() {
         return;
     }
 
-    filtered.forEach((p, index) => {
+    filtered.forEach((p) => {
         const card = document.createElement('div');
         card.className = 'product-card';
         
-        // Si no hay imagen válida, se genera un recuadro de color amigable automáticamente
         const itemImg = p.imagen ? p.imagen : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" style="background:%23e2e8f0;"><text x="50%" y="55%" font-family="sans-serif" font-size="10" fill="%2364748b" text-anchor="middle">Sin Foto</text></svg>';
-
-        // Cambiar texto dinámicamente y mantenerlo limpio (sin emojis)
         const btnText = p.categoria === 'belleza' ? 'Ver servicio →' : 'Ver detalles →';
 
+        // CORRECCIÓN CRÍTICA: Ahora mandamos el ID único del producto de la base de datos (p.id) 
+        // en lugar de su índice index, evitando que se abra el producto equivocado al buscar o filtrar.
         card.innerHTML = `
             <div class="prod-img-box">
                 <img src="${itemImg}" alt="${p.nombre}">
@@ -86,7 +81,7 @@ function renderStore() {
                 <div class="prod-meta">
                     <span class="prod-price">$${Number(p.precio).toFixed(2)}</span>
                 </div>
-                <button class="order-btn" onclick="openProductModal(${products.indexOf(p)})">
+                <button class="order-btn" onclick="openProductModal('${p.id}')">
                     ${btnText}
                 </button>
             </div>
@@ -100,7 +95,8 @@ function filterCategory(cat) {
     document.querySelectorAll('.cat-card').forEach(card => {
         card.classList.remove('active');
     });
-    document.querySelector(`[data-cat="${cat}"]`).classList.add('active');
+    const targetCard = document.querySelector(`[data-cat="${cat}"]`);
+    if (targetCard) targetCard.classList.add('active');
     renderStore();
 }
 
@@ -111,8 +107,11 @@ function searchProducts() {
 /* ==========================================================================
    4. MODAL DE PRODUCTO (DETALLES Y CANTIDADES)
    ========================================================================== */
-function openProductModal(index) {
-    currentActiveProd = products[index];
+function openProductModal(prodId) {
+    // Busca el producto exacto por su ID dentro del array global
+    currentActiveProd = products.find(p => String(p.id) === String(prodId));
+    if (!currentActiveProd) return;
+
     qty = 1;
     document.getElementById('qtyVal').innerText = qty;
 
@@ -120,7 +119,9 @@ function openProductModal(index) {
     document.getElementById('modalPrice').innerText = '$' + Number(currentActiveProd.precio).toFixed(2);
     
     const modalImg = document.getElementById('modalImg');
-    modalImg.src = currentActiveProd.imagen ? currentActiveProd.imagen : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" style="background:%23e2e8f0;"><text x="50%" y="55%" font-family="sans-serif" font-size="10" fill="%2364748b" text-anchor="middle">Sin Foto</text></svg>';
+    if (modalImg) {
+        modalImg.src = currentActiveProd.imagen ? currentActiveProd.imagen : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" style="background:%23e2e8f0;"><text x="50%" y="55%" font-family="sans-serif" font-size="10" fill="%2364748b" text-anchor="middle">Sin Foto</text></svg>';
+    }
 
     // Sistema de Stock
     const stock = currentActiveProd.stock || 0;
@@ -129,155 +130,174 @@ function openProductModal(index) {
         stockDisplay = document.createElement('p');
         stockDisplay.id = 'modalStock';
         stockDisplay.className = 'modal-stock-info';
-        document.getElementById('modalPrice').insertAdjacentElement('afterend', stockDisplay);
+        const priceLabel = document.getElementById('modalPrice');
+        if (priceLabel) priceLabel.insertAdjacentElement('afterend', stockDisplay);
     }
 
     const wpBtn = document.querySelector('.send-wp-final');
     const qtyArea = document.getElementById('qtyArea');
 
     if (currentActiveProd.categoria === 'belleza') {
-        stockDisplay.style.display = 'none';
-        wpBtn.disabled = false;
-        wpBtn.querySelector('span').innerText = "Consultar por WhatsApp →";
-    } else {
-        stockDisplay.style.display = 'block';
-        if (stock > 0) {
-            stockDisplay.innerHTML = `Disponibles: ${stock}`;
+        if (stockDisplay) stockDisplay.style.display = 'none';
+        if (wpBtn) {
             wpBtn.disabled = false;
-            wpBtn.querySelector('span').innerText = "Reservar por WhatsApp →";
+            wpBtn.querySelector('span').innerText = "Consultar por WhatsApp →";
+        }
+    } else {
+        if (stockDisplay) stockDisplay.style.display = 'block';
+        if (stock > 0) {
+            if (stockDisplay) stockDisplay.innerHTML = `Disponibles: ${stock}`;
+            if (wpBtn) {
+                wpBtn.disabled = false;
+                wpBtn.querySelector('span').innerText = "Reservar por WhatsApp →";
+            }
         } else {
-            stockDisplay.innerHTML = `<span class="stock-out">❌ AGOTADO</span>`;
-            wpBtn.disabled = true;
-            wpBtn.querySelector('span').innerText = "Agotado";
+            if (stockDisplay) stockDisplay.innerHTML = `<span class="stock-out">❌ AGOTADO</span>`;
+            if (wpBtn) {
+                wpBtn.disabled = true;
+                wpBtn.querySelector('span').innerText = "Agotado";
+            }
         }
     }
 
     // Cambios de textos dinámicos exactos para las dos columnas
     const modalDesc = document.querySelector('.modal-product-desc');
+    const variantLabel = document.getElementById('variantLabel');
 
     if (currentActiveProd.categoria === 'belleza') {
-        document.getElementById('variantLabel').innerText = "PROGRAMAR CITA";
-        document.getElementById('qtyArea').style.display = 'none';
-        modalDesc.innerText = "Servicio disponible en Variedades Alejandro. Agenda tu cita, consulta por WhatsApp.";
+        if (variantLabel) variantLabel.innerText = "PROGRAMAR CITA";
+        if (qtyArea) qtyArea.style.display = 'none';
+        if (modalDesc) modalDesc.innerText = "Servicio disponible en Variedades Alejandro. Agenda tu cita, consulta por WhatsApp.";
     } else if (currentActiveProd.categoria === 'electro') {
-        if (stock <= 0) {
-            document.getElementById('qtyArea').style.display = 'none';
-        } else {
-            document.getElementById('qtyArea').style.display = 'flex';
-        }
-        document.getElementById('variantLabel').innerText = "DISEÑOS DISPONIBLES";
-        modalDesc.innerText = "Electrodoméstico disponible en Variedades Alejandro. Consulta disponibilidad y detalles por WhatsApp.";
+        if (qtyArea) qtyArea.style.display = stock <= 0 ? 'none' : 'flex';
+        if (variantLabel) variantLabel.innerText = "DISEÑOS DISPONIBLES";
+        if (modalDesc) modalDesc.innerText = "Electrodoméstico disponible en Variedades Alejandro. Consulta disponibilidad y detalles por WhatsApp.";
     } else if (currentActiveProd.categoria.includes('calzado')) {
-        if (stock <= 0) {
-            document.getElementById('qtyArea').style.display = 'none';
-        } else {
-            document.getElementById('qtyArea').style.display = 'flex';
-        }
-        document.getElementById('variantLabel').innerText = "TALLAS DISPONIBLES";
-        modalDesc.innerText = "Calzado disponible en Variedades Alejandro. Consulta tallas y disponibilidad por WhatsApp.";
+        if (qtyArea) qtyArea.style.display = stock <= 0 ? 'none' : 'flex';
+        if (variantLabel) variantLabel.innerText = "TALLAS DISPONIBLES";
+        if (modalDesc) modalDesc.innerText = "Calzado disponible en Variedades Alejandro. Consulta tallas y disponibilidad por WhatsApp.";
     } else if (currentActiveProd.categoria === 'corporal') {
-        if (stock <= 0) {
-            document.getElementById('qtyArea').style.display = 'none';
-        } else {
-            document.getElementById('qtyArea').style.display = 'flex';
-        }
-        document.getElementById('variantLabel').innerText = "TONOS DISPONIBLES";
-        modalDesc.innerText = "Producto corporal disponible en Variedades Alejandro. Consulta tonos y disponibilidad por WhatsApp.";
+        if (qtyArea) qtyArea.style.display = stock <= 0 ? 'none' : 'flex';
+        if (variantLabel) variantLabel.innerText = "DISPONIBLES";
+        if (modalDesc) modalDesc.innerText = "Producto disponible en Variedades Alejandro. Consulta tonos y disponibilidad por WhatsApp.";
     } else {
-        if (stock <= 0) {
-            document.getElementById('qtyArea').style.display = 'none';
-        } else {
-            document.getElementById('qtyArea').style.display = 'flex';
-        }
-        document.getElementById('variantLabel').innerText = "TALLAS DISPONIBLES";
-        modalDesc.innerText = "Artículo disponible en Variedades Alejandro. Haz tu consulta directa por WhatsApp.";
+        if (qtyArea) qtyArea.style.display = stock <= 0 ? 'none' : 'flex';
+        if (variantLabel) variantLabel.innerText = "TALLAS DISPONIBLES";
+        if (modalDesc) modalDesc.innerText = "Artículo disponible en Variedades Alejandro. Haz tu consulta directa por WhatsApp.";
     }
 
     const box = document.getElementById('sizeOptionsBox');
-    box.innerHTML = '';
-    
-    let variants = [];
-    if (currentActiveProd.variante && currentActiveProd.variante.trim() !== '') {
-        variants = currentActiveProd.variante.split(',').map(v => v.trim());
-    } else {
-        variants = ['Estándar'];
+    if (box) {
+        box.innerHTML = '';
+        
+        let variants = [];
+        if (currentActiveProd.variante && currentActiveProd.variante.trim() !== '') {
+            variants = currentActiveProd.variante.split(',').map(v => v.trim());
+        } else {
+            variants = ['Estándar'];
+        }
+
+        selectedSizeStr = variants[0];
+
+        variants.forEach((v, i) => {
+            const btn = document.createElement('button');
+            btn.className = `size-btn ${i === 0 ? 'selected' : ''}`;
+            btn.innerText = v;
+            btn.onclick = () => {
+                const siblingButtons = box.querySelectorAll('.size-btn');
+                siblingButtons.forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedSizeStr = v;
+            };
+            box.appendChild(btn);
+        });
     }
 
-    selectedSizeStr = variants[0];
-
-    variants.forEach((v, i) => {
-        const btn = document.createElement('button');
-        btn.className = `size-btn ${i === 0 ? 'selected' : ''}`;
-        btn.innerText = v;
-        btn.onclick = () => {
-            const siblingButtons = box.querySelectorAll('.size-btn');
-            siblingButtons.forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            selectedSizeStr = v;
-        };
-        box.appendChild(btn);
-    });
-
-    document.getElementById('productModal').classList.add('active');
+    const modalElement = document.getElementById('productModal');
+    if (modalElement) modalElement.classList.add('active');
 }
 
 function closeProductModal() {
-    document.getElementById('productModal').classList.remove('active');
+    const modalElement = document.getElementById('productModal');
+    if (modalElement) modalElement.classList.remove('active');
 }
 
 function updateQty(val) {
+    if (!currentActiveProd) return;
     const stock = currentActiveProd.stock || 0;
     const newQty = qty + val;
     if (newQty < 1) return;
     if (newQty > stock) return;
     qty = newQty;
-    document.getElementById('qtyVal').innerText = qty;
+    const qtyValElement = document.getElementById('qtyVal');
+    if (qtyValElement) qtyValElement.innerText = qty;
 }
 
 /* ==========================================================================
    5. ACCIONES EXTERNAS (NATIVA DE WHATSAPP SIN PARPADEO)
    ========================================================================== */
 function sendToWhatsApp() {
-    const phone = "50375037418"; // Tu número de WhatsApp registrado
+    if (!currentActiveProd) return;
+    const phone = "50375037418"; 
     let msg = "";
 
+    // 1. SALÓN DE BELLEZA (Servicios / Citas)
     if (currentActiveProd.categoria === 'belleza') {
-        msg = `¡Hola! Me interesa agendar una cita en Variedades Alejandro:\n\n` +
+        msg = `¡Hola! Me interesa agendar una cita en el Salón de Variedades Alejandro:\n\n` +
               `*Servicio:* ${currentActiveProd.nombre}\n` +
               `*Tipo:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n\n` +
-              `¡Podrían brindarme más información!`;
+              `¡Podrían brindarme más información para agendar!`;
+
+    // 2. PRODUCTOS DE BELLEZA / CORPORAL (Tonos / Variantes)
+    } else if (currentActiveProd.categoria === 'corporal') {
+        msg = `¡Hola! Me interesa este producto de belleza en Variedades Alejandro:\n\n` +
+              `*Producto:* ${currentActiveProd.nombre}\n` +
+              `*Tono/Variante:* ${selectedSizeStr}\n` +
+              `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
+              `*Cantidad:* ${qty}\n\n` +
+              `¡Podrían brindarme más detalles!`;
+
+    // 3. ELECTRODOMÉSTICOS (Diseños / Modelos)
     } else if (currentActiveProd.categoria === 'electro') {
-        msg = `¡Hola! Estoy interesado en este electrodoméstico:\n\n` +
+        msg = `¡Hola! Estoy interesado en este electrodoméstico de Variedades Alejandro:\n\n` +
               `*Producto:* ${currentActiveProd.nombre}\n` +
               `*Diseño:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
-              `¡Podrían brindarme más información!`;
-    } else if (currentActiveProd.categoria === 'corporal') {
-        msg = `¡Hola! Me interesa este producto de cuidado personal:\n\n` +
-              `*Producto:* ${currentActiveProd.nombre}\n` +
-              `*Tono:* ${selectedSizeStr}\n` +
+              `¿Tienen disponible para entrega inmediata?`;
+
+    // 4. CALZADO (Mujer y Niño -> Tallas de calzado)
+    } else if (currentActiveProd.categoria === 'mujer-calzado' || currentActiveProd.categoria === 'ninos-calzado') { 
+        // Nota: En tu HTML "ninos-calzado" muestra "Juguetes", si son juguetes usará la variante. 
+        // Si es calzado mantendrá la etiqueta de Talla perfecta.
+        const etiquetaCalzado = currentActiveProd.categoria === 'ninos-calzado' ? 'Estilo/Variante' : 'Talla';
+        msg = `¡Hola! Me interesa este artículo de la sección de calzado/juguetes:\n\n` +
+              `*Artículo:* ${currentActiveProd.nombre}\n` +
+              `*${etiquetaCalzado}:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
-              `¡Podrían brindarme más información!`;
-    } else if (currentActiveProd.categoria.includes('calzado')) { 
-        msg = `¡Hola! Me interesa este calzado:\n\n` +
-              `*Producto:* ${currentActiveProd.nombre}\n` +
+              `¡Me gustaría confirmar disponibilidad!`;
+
+    // 5. ROPA (Mujer, Hombre, Niños -> Tallas de ropa)
+    } else if (currentActiveProd.categoria === 'mujer-ropa' || currentActiveProd.categoria === 'hombre-ropa' || currentActiveProd.categoria === 'ninos-ropa') {
+        msg = `¡Hola! Me interesa esta prenda de ropa en Variedades Alejandro:\n\n` +
+              `*Prenda:* ${currentActiveProd.nombre}\n` +
               `*Talla:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
-              `¡Podrían brindarme más información!`;
+              `¡Quiero confirmar si la tienen en existencia!`;
+
+    // 6. HOGAR Y COMODIDADES / CUALQUIER OTRO (Categoría "hombre-calzado" en el HTML que dice Hogar)
     } else {
-        msg = `¡Hola! Me interesa este artículo:\n\n` +
+        msg = `¡Hola! Me interesa este producto para el hogar / artículo:\n\n` +
               `*Producto:* ${currentActiveProd.nombre}\n` +
-              `*Talla:* ${selectedSizeStr}\n` +
+              `*Variante:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
               `¡Podrían brindarme más información!`;
     }
 
-    // Al usar api.whatsapp con target _blank el navegador delega de inmediato el control al OS móvil
     const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
 }
