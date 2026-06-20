@@ -317,7 +317,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 30px;
-    align-items: start; /* Evita que las tarjetas pequeñas se estiren feo */
+    align-items: stretch; /* Modificado de 'start' a 'stretch' para que todas las tarjetas midan igual */
 }
 
 .store-empty-msg { grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px 0; }
@@ -359,6 +359,7 @@ body {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    justify-content: space-between; /* Empuja el contenido simétricamente hacia los extremos */
 }
 
 .prod-title {
@@ -370,13 +371,21 @@ body {
     text-overflow: ellipsis;
     word-break: break-word;
     overflow-wrap: anywhere;
+    
+    /* CORRECCIÓN DE ALTURA SIMÉTRICA (2 LÍNEAS EXACTAS) */
+min-height: 45px;
+display: -webkit-box;
+-webkit-line-clamp: 2;
+line-clamp: 2; /* Esto le quita la advertencia al editor */
+-webkit-box-orient: vertical;
+overflow: hidden;
 }
 
 .prod-meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: auto;
+    margin-top: auto; /* Ancla los metadatos y el precio al fondo */
 }
 
 .prod-price {
@@ -437,7 +446,6 @@ body {
     opacity: 1;
     pointer-events: auto;
 }
-
 .modal-content {
     background: white;
     width: 100%;
@@ -813,11 +821,14 @@ footer p {
     .store-grid {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 12px !important;
-        align-items: start;
+        align-items: stretch !important; /* Forzado para estirar las tarjetas */
     }
 
     .product-card {
         border-radius: 12px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important; /* Asegura un alto total uniforme */
     }
 
     /* Imagen fluida en móvil */
@@ -831,11 +842,23 @@ footer p {
 
     .prod-info {
         padding: 10px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        flex-grow: 1 !important;
+        justify-content: space-between !important;
     }
 
     .prod-title {
         font-size: 0.9rem !important;
         margin-bottom: 8px !important;
+        
+        /* ALINEACIÓN SIMÉTRICA PARA CELULAR */
+        min-height: 38px !important; 
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        line-clamp: 2 !important; /* Añadimos esto para quitar la ondita */
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
     }
 
     .prod-price {
@@ -845,6 +868,7 @@ footer p {
     .order-btn {
         padding: 10px;
         font-size: 0.85rem;
+        margin-top: auto !important; /* Empuja el botón siempre abajo */
     }
 
     /* ADAPTACIÓN EN EL MODAL PARA MÓVIL (Pasa a ser vertical arriba/abajo) */
