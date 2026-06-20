@@ -198,7 +198,7 @@ body {
 .hero {
     height: 70vh;
     min-height: 500px;
-    background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.7)), url('localVA.jpeg') center/cover no-repeat;
+    background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.7)), url('fportada.jpeg') center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
