@@ -248,7 +248,7 @@ function sendToWhatsApp() {
               `*Talla:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
-              `¿Tienen disponible en existencia?`;
+              `¡Podría brindarme más informaión!`;
 
     // 2. ROPA HOMBRE (Talla)
     } else if (currentActiveProd.categoria === 'hombre-ropa') {
@@ -257,7 +257,7 @@ function sendToWhatsApp() {
               `*Talla:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
-              `¿Tienen disponible este modelo?`;
+              `¡Podría brindarme más informaión!`;
 
     // 3. CALZADO (Talla de zapato)
     } else if (currentActiveProd.categoria === 'mujer-calzado') {
@@ -266,7 +266,7 @@ function sendToWhatsApp() {
               `*Talla:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
-              `¿Tienen disponible esta numeración?`;
+              `¡Podría brindarme más informaión!`;
 
     // 4. ROPA NIÑOS (Talla / Edad)
     } else if (currentActiveProd.categoria === 'ninos-ropa') {
@@ -275,7 +275,7 @@ function sendToWhatsApp() {
               `*Talla/Edad:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
-              `¿Tienen disponible para entrega inmediata?`;
+              `¡Podría brindarme más informaión!`;
 
     // 5. JUGUETES (Estilo o Personaje)
     } else if (currentActiveProd.categoria === 'ninos-calzado') { 
@@ -284,7 +284,7 @@ function sendToWhatsApp() {
               `*Estilo/Variante:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
-              `¿Tienen este disponible en tienda?`;
+              `¡Podría brindarme más informaión!`;
 
     // 6. HOGAR Y COMODIDADES (Diseño o Modelo)
     } else if (currentActiveProd.categoria === 'hombre-calzado') {
@@ -293,7 +293,7 @@ function sendToWhatsApp() {
               `*Modelo/Diseño:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
-              `¿Podrían darme más información sobre este artículo?`;
+              `¡Podría brindarme más informaión!`;
 
     // 7. PRODUCTOS DE BELLEZA (Tono, Color o Tipo)
     } else if (currentActiveProd.categoria === 'corporal') {
@@ -302,7 +302,7 @@ function sendToWhatsApp() {
               `*Tono/Variante:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
-              `¿Tienen existencias disponibles de este tono?`;
+              `¡Podría brindarme más informaión!`;
 
     // 8. SALÓN DE BELLEZA (Citas / Servicios)
     } else if (currentActiveProd.categoria === 'belleza') {
@@ -310,7 +310,7 @@ function sendToWhatsApp() {
               `*Servicio:* ${currentActiveProd.nombre}\n` +
               `*Opción:* ${selectedSizeStr}\n` +
               `*Precio desde:* $${Number(currentActiveProd.precio).toFixed(2)}\n\n` +
-              `¿Qué horarios tienen disponibles para agendar una cita?`;
+              `¡Podría brindarme más informaión!`;
 
     // 9. ELECTRODOMÉSTICOS (Modelo / Capacidad)
     } else if (currentActiveProd.categoria === 'electro') {
@@ -319,17 +319,7 @@ function sendToWhatsApp() {
               `*Capacidad/Diseño:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
-              `¿Cuenta con garantía? Me interesa comprarlo.`;
-
-    // POR SI ACASO (Categoría extra o error)
-    } else {
-        msg = `¡Hola! Me interesa este artículo de Variedades Alejandro:\n\n` +
-              `*Producto:* ${currentActiveProd.nombre}\n` +
-              `*Variante:* ${selectedSizeStr}\n` +
-              `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
-              `*Cantidad:* ${qty}\n\n` +
-              `¡Deseo consultar la disponibilidad!`;
-    }
+              `¡Podría brindarme más informaión!`;
 
     const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
