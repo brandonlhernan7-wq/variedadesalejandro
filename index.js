@@ -320,16 +320,7 @@ function sendToWhatsApp() {
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
               `¡Podría brindarme más información!`;
-
-    // POR SI ACASO (Categoría extra o error)
-    } else {
-        msg = `¡Hola! Me interesa este artículo de Variedades Alejandro:\n\n` +
-              `*Producto:* ${currentActiveProd.nombre}\n` +
-              `*Variante:* ${selectedSizeStr}\n` +
-              `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
-              `*Cantidad:* ${qty}\n\n` +
-              `¡Deseo consultar la disponibilidad!`;
-    }
+    } 
 
     const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
