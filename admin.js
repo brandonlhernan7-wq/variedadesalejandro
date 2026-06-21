@@ -1,9 +1,13 @@
-/* --- ESTADO GLOBAL --- */
+/* ==========================================================================
+   1. ESTADO GLOBAL
+   ========================================================================== */
 let products = [];
 let selectedFile = null;
 let base64Preview = ""; 
 
-/* --- PROCESAMIENTO DE ARCHIVOS --- */
+/* ==========================================================================
+   2. PROCESAMIENTO DE ARCHIVOS
+   ========================================================================== */
 function processFile(event) {
     selectedFile = event.target.files[0];
     if (!selectedFile) return;
@@ -16,7 +20,9 @@ function processFile(event) {
     reader.readAsDataURL(selectedFile);
 }
 
-/* --- ACCIONES API (SUPABASE) --- */
+/* ==========================================================================
+   3. ACCIONES API (SUPABASE)
+   ========================================================================== */
 async function saveProduct(e) {
     e.preventDefault();
     const submitBtn = document.getElementById('submit-btn');
@@ -30,9 +36,9 @@ async function saveProduct(e) {
     if (selectedFile) {
         const sanitizedName = selectedFile.name
             .normalize("NFD")               // Descompone caracteres con acentos
-            .replace(/[\u0300-\u036f]/g, "") // Elimina tildes y diacríticos (incluye ñ)
+            .replace(/[\u0300-\u036f]/g, "") // Elimina tildes y diacríticos
             .replace(/\s+/g, "")             // Elimina espacios
-            .replace(/[^a-zA-Z0-9._-]/g, ""); // Solo permite a-z, A-Z, 0-9, punto, guion y guion bajo
+            .replace(/[^a-zA-Z0-9._-]/g, ""); // Filtro estricto de caracteres sanos
         const fileName = `${Date.now()}_${sanitizedName}`;
         const { data: uploadData, error: uploadError } = await supabaseClient.storage
             .from('productos')
@@ -48,7 +54,12 @@ async function saveProduct(e) {
         imageUrl = urlData.publicUrl;
     }
 
-    // CORRECCIÓN CRÍTICA: Cambiado 'formCat' por 'productCategory' para conectar con tu select HTML
+    // Captura y limpieza de la categoría seleccionada
+    const categoriaSeleccionada = document.getElementById('productCategory').value;
+    
+    // Si la categoría es 'belleza', forzar stock a 0 automáticamente
+    const stockFinal = (categoriaSeleccionada === 'belleza') ? 0 : (parseInt(document.getElementById('formStock').value) || 0);
+
     const productData = {
             nombre: document.getElementById('formName').value.trim(),
             precio: parseFloat(
@@ -57,8 +68,8 @@ async function saveProduct(e) {
                     .replace('$', '')
                     .trim()
             ),
-            categoria: document.getElementById('productCategory').value, 
-            stock: parseInt(document.getElementById('formStock').value) || 0,
+            categoria: categoriaSeleccionada, 
+            stock: stockFinal,
             variante: document.getElementById('formSizes').value.trim(),
             imagen: imageUrl,
             activo: true
@@ -100,7 +111,9 @@ async function fetchProducts() {
     else products = data;
 }
 
-/* --- GESTIÓN DEL FORMULARIO --- */
+/* ==========================================================================
+   4. GESTIÓN DEL FORMULARIO
+   ========================================================================== */
 function resetForm() {
     document.getElementById('productForm').closest('.glass-card').classList.remove('modo-edicion');
     document.getElementById('productForm').reset();
@@ -127,10 +140,7 @@ function editProduct(id) {
     document.getElementById('edit-index').value = p.id;
     document.getElementById('formName').value = p.nombre;
     document.getElementById('formPrice').value = '$' + Number(p.precio).toFixed(2);
-    
-    // CORRECCIÓN CRÍTICA EN EDICIÓN: Cambiado 'formCat' por 'productCategory'
     document.getElementById('productCategory').value = p.categoria; 
-    
     document.getElementById('formStock').value = p.stock || 0;
     document.getElementById('formSizes').value = p.variante;
     
@@ -144,7 +154,9 @@ function editProduct(id) {
     document.getElementById('cancel-edit').style.display = "block";
 }
 
-/* --- RENDERIZADO DE UI --- */
+/* ==========================================================================
+   5. RENDERIZADO DE UI
+   ========================================================================== */
 function renderAdminList() {
     const list = document.getElementById('adminItemsList');
     const searchInput = document.getElementById('adminSearch');
@@ -164,6 +176,9 @@ function renderAdminList() {
         const toggleIcon = p.activo ? '🚫' : '👁️';
         const toggleBg = p.activo ? '#64748b' : '#22c55e'; 
 
+        // Modificador visual en la lista si es un servicio de belleza sin inventario físico
+        const stockDisplay = (p.categoria === 'belleza') ? 'N/A (Servicio)' : (p.stock || 0);
+
         const row = document.createElement('div');
         row.className = 'inventory-item';
         row.style.animationDelay = `${idx * 0.05}s`;
@@ -171,7 +186,7 @@ function renderAdminList() {
             <img src="${p.imagen || 'https://via.placeholder.com/50'}" class="item-img">
             <div class="item-info">
                 <span class="item-name">${p.nombre}</span>
-                <span class="item-price">$${Number(p.precio).toFixed(2)} <span class="item-status">Stock: ${p.stock || 0} | ${statusLabel}</span></span>
+                <span class="item-price">$${Number(p.precio).toFixed(2)} <span class="item-status">Stock: ${stockDisplay} | ${statusLabel}</span></span>
             </div>
             <div class="action-btns">
                 <button class="btn-icon" style="background: ${toggleBg}" onclick="toggleProductStatus(${p.id}, ${p.activo})" title="${toggleTitle}">${toggleIcon}</button>
@@ -213,7 +228,7 @@ async function deleteProduct(id) {
     }
 }
 
-// Cargar inventario automáticamente
+// Cargar inventario automáticamente al arrancar
 if (document.getElementById('admin-panel') || document.getElementById('adminItemsList')) {
     fetchProducts().then(() => renderAdminList());
 }
