@@ -70,8 +70,6 @@ function renderStore() {
         const itemImg = p.imagen ? p.imagen : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" style="background:%23e2e8f0;"><text x="50%" y="55%" font-family="sans-serif" font-size="10" fill="%2364748b" text-anchor="middle">Sin Foto</text></svg>';
         const btnText = p.categoria === 'belleza' ? 'Ver servicio →' : 'Ver detalles →';
 
-        // CORRECCIÓN CRÍTICA: Ahora mandamos el ID único del producto de la base de datos (p.id) 
-        // en lugar de su índice index, evitando que se abra el producto equivocado al buscar o filtrar.
         card.innerHTML = `
             <div class="prod-img-box">
                 <img src="${itemImg}" alt="${p.nombre}">
@@ -108,7 +106,6 @@ function searchProducts() {
    4. MODAL DE PRODUCTO (DETALLES Y CANTIDADES)
    ========================================================================== */
 function openProductModal(prodId) {
-    // Busca el producto exacto por su ID dentro del array global
     currentActiveProd = products.find(p => String(p.id) === String(prodId));
     if (!currentActiveProd) return;
 
@@ -160,11 +157,19 @@ function openProductModal(prodId) {
         }
     }
 
-    // Cambios de textos dinámicos exactos para las dos columnas
+    // Cambios de textos dinámicos exactos usando los nuevos identificadores
     const modalDesc = document.querySelector('.modal-product-desc');
     const variantLabel = document.getElementById('variantLabel');
 
-    if (currentActiveProd.categoria === 'belleza') {
+    if (currentActiveProd.categoria === 'juguetes') {
+        if (qtyArea) qtyArea.style.display = stock <= 0 ? 'none' : 'flex';
+        if (variantLabel) variantLabel.innerText = "ESTILOS DISPONIBLES";
+        if (modalDesc) modalDesc.innerText = "Juguete disponible en Variedades Alejandro. Consulta modelos y existencias por WhatsApp.";
+    } else if (currentActiveProd.categoria === 'hogar') {
+        if (qtyArea) qtyArea.style.display = stock <= 0 ? 'none' : 'flex';
+        if (variantLabel) variantLabel.innerText = "MEDIDAS / DISEÑOS";
+        if (modalDesc) modalDesc.innerText = "Artículo de hogar disponible en Variedades Alejandro. Consulta diseños y entregas por WhatsApp.";
+    } else if (currentActiveProd.categoria === 'belleza') {
         if (variantLabel) variantLabel.innerText = "PROGRAMAR CITA";
         if (qtyArea) qtyArea.style.display = 'none';
         if (modalDesc) modalDesc.innerText = "Servicio disponible en Variedades Alejandro. Agenda tu cita, consulta por WhatsApp.";
@@ -241,7 +246,7 @@ function sendToWhatsApp() {
     const phone = "50375037418"; 
     let msg = "";
 
-    // 1. ROPA MUJER (Talla)
+    // 1. ROPA MUJER
     if (currentActiveProd.categoria === 'mujer-ropa') {
         msg = `¡Hola! Me interesa esta prenda para dama en Variedades Alejandro:\n\n` +
               `*Prenda:* ${currentActiveProd.nombre}\n` +
@@ -250,7 +255,7 @@ function sendToWhatsApp() {
               `*Cantidad:* ${qty}\n\n` +
               `¡Podría brindarme más información!`;
 
-    // 2. ROPA HOMBRE (Talla)
+    // 2. ROPA HOMBRE
     } else if (currentActiveProd.categoria === 'hombre-ropa') {
         msg = `¡Hola! Me interesa esta prenda para caballero en Variedades Alejandro:\n\n` +
               `*Prenda:* ${currentActiveProd.nombre}\n` +
@@ -259,7 +264,7 @@ function sendToWhatsApp() {
               `*Cantidad:* ${qty}\n\n` +
               `¡Podría brindarme más información!`;
 
-    // 3. CALZADO (Talla de zapato)
+    // 3. CALZADO
     } else if (currentActiveProd.categoria === 'mujer-calzado') {
         msg = `¡Hola! Me interesa este calzado en Variedades Alejandro:\n\n` +
               `*Estilo:* ${currentActiveProd.nombre}\n` +
@@ -268,7 +273,7 @@ function sendToWhatsApp() {
               `*Cantidad:* ${qty}\n\n` +
               `¡Podría brindarme más información!`;
 
-    // 4. ROPA NIÑOS (Talla / Edad)
+    // 4. ROPA NIÑOS
     } else if (currentActiveProd.categoria === 'ninos-ropa') {
         msg = `¡Hola! Me interesa esta prenda infantil en Variedades Alejandro:\n\n` +
               `*Artículo:* ${currentActiveProd.nombre}\n` +
@@ -277,8 +282,8 @@ function sendToWhatsApp() {
               `*Cantidad:* ${qty}\n\n` +
               `¡Podría brindarme más información!`;
 
-    // 5. JUGUETES (Estilo o Personaje)
-    } else if (currentActiveProd.categoria === 'ninos-calzado') { 
+    // 5. JUGUETES (Corregido a la nueva categoría)
+    } else if (currentActiveProd.categoria === 'juguetes') { 
         msg = `¡Hola! Me interesa este juguete en Variedades Alejandro:\n\n` +
               `*Juguete:* ${currentActiveProd.nombre}\n` +
               `*Estilo/Variante:* ${selectedSizeStr}\n` +
@@ -286,8 +291,8 @@ function sendToWhatsApp() {
               `*Cantidad:* ${qty}\n\n` +
               `¡Podría brindarme más información!`;
 
-    // 6. HOGAR Y COMODIDADES (Diseño o Modelo)
-    } else if (currentActiveProd.categoria === 'hombre-calzado') {
+    // 6. HOGAR Y COMODIDADES (Corregido a la nueva categoría)
+    } else if (currentActiveProd.categoria === 'hogar') {
         msg = `¡Hola! Me interesa este artículo para el hogar en Variedades Alejandro:\n\n` +
               `*Producto:* ${currentActiveProd.nombre}\n` +
               `*Modelo/Diseño:* ${selectedSizeStr}\n` +
@@ -295,7 +300,7 @@ function sendToWhatsApp() {
               `*Cantidad:* ${qty}\n\n` +
               `¡Podría brindarme más información!`;
 
-    // 7. PRODUCTOS DE BELLEZA (Tono, Color o Tipo)
+    // 7. PRODUCTOS DE BELLEZA
     } else if (currentActiveProd.categoria === 'corporal') {
         msg = `¡Hola! Me interesa este producto cosmético/belleza en Variedades Alejandro:\n\n` +
               `*Producto:* ${currentActiveProd.nombre}\n` +
@@ -304,7 +309,7 @@ function sendToWhatsApp() {
               `*Cantidad:* ${qty}\n\n` +
               `¡Podría brindarme más información!`;
 
-    // 8. SALÓN DE BELLEZA (Citas / Servicios)
+    // 8. SALÓN DE BELLEZA
     } else if (currentActiveProd.categoria === 'belleza') {
         msg = `¡Hola! Me interesa reservar o consultar un servicio del Salón de Variedades Alejandro:\n\n` +
               `*Servicio:* ${currentActiveProd.nombre}\n` +
@@ -312,7 +317,7 @@ function sendToWhatsApp() {
               `*Precio desde:* $${Number(currentActiveProd.precio).toFixed(2)}\n\n` +
               `¡Podría brindarme más información!`;
 
-    // 9. ELECTRODOMÉSTICOS (Modelo / Capacidad)
+    // 9. ELECTRODOMÉSTICOS
     } else if (currentActiveProd.categoria === 'electro') {
         msg = `¡Hola! Estoy interesado en este electrodoméstico de Variedades Alejandro:\n\n` +
               `*Aparato:* ${currentActiveProd.nombre}\n` +
