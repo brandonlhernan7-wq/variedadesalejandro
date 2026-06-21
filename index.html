@@ -6,13 +6,12 @@
     <title>Variedades Alejandro</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
-
 </head>
 <body>
 
     <header class="header">
         <div class="nav-container">
-            <a href="#" class="logo-area">
+            <a href="javascript:void(0);" onclick="window.scrollTo({top: 0, behavior: 'smooth'});" class="logo-area">
                 <img src="logoAV.png" alt="Logo Alejandro" onerror="this.style.display='none';">
                 <div class="logo-text">
                     <span class="logo-title">Alejandro</span>
@@ -27,11 +26,10 @@
                 <span></span>
             </label>
 
-           <ul class="nav-menu">
-                <li><a href="#" class="nav-link" onclick="document.getElementById('menu-toggle').checked = false">Inicio</a></li>
+            <ul class="nav-menu">
+                <li><a href="javascript:void(0);" class="nav-link" onclick="document.getElementById('menu-toggle').checked = false; window.scrollTo({top: 0, behavior: 'smooth'});">Inicio</a></li>
                 <li><a href="#catalogo" class="nav-link" onclick="document.getElementById('menu-toggle').checked = false">Catálogo</a></li>
                 <li><a href="#ubicacion" class="nav-link" onclick="document.getElementById('menu-toggle').checked = false">Ubicación</a></li>
-                
             </ul>
         </div>
     </header>
@@ -49,90 +47,89 @@
             <p>Filtrado por categorías para una búsqueda más cómoda</p>
         </div>
 
-       <div class="categories-grid">
-    <div class="cat-card active" data-cat="all" onclick="filterCategory('all')"><span>Todo</span></div>
-    <div class="cat-card" data-cat="mujer-ropa" onclick="filterCategory('mujer-ropa')"><span>Ropa Mujer</span></div>
-    <div class="cat-card" data-cat="hombre-ropa" onclick="filterCategory('hombre-ropa')"><span>Ropa Hombre</span></div>
-    <div class="cat-card" data-cat="mujer-calzado" onclick="filterCategory('mujer-calzado')"><span>Calzado</span></div>
-    <div class="cat-card" data-cat="ninos-ropa" onclick="filterCategory('ninos-ropa')"><span>Ropa Niños</span></div>
-    <div class="cat-card" data-cat="ninos-calzado" onclick="filterCategory('ninos-calzado')"><span>Juguetes</span></div> 
-    <div class="cat-card" data-cat="hombre-calzado" onclick="filterCategory('hombre-calzado')"><span>Hogar y Comodidades</span></div> 
-    <div class="cat-card" data-cat="corporal" onclick="filterCategory('corporal')"><span>Productos de Belleza</span></div>
-    <div class="cat-card" data-cat="belleza" onclick="filterCategory('belleza')"><span>Salón</span></div>
-    <div class="cat-card" data-cat="electro" onclick="filterCategory('electro')"><span>Electrodomésticos</span></div>
-</div>
+        <div class="categories-grid">
+            <div class="cat-card active" data-cat="all" onclick="filterCategory('all')"><span>Todo</span></div>
+            <div class="cat-card" data-cat="mujer-ropa" onclick="filterCategory('mujer-ropa')"><span>Ropa Mujer</span></div>
+            <div class="cat-card" data-cat="hombre-ropa" onclick="filterCategory('hombre-ropa')"><span>Ropa Hombre</span></div>
+            <div class="cat-card" data-cat="mujer-calzado" onclick="filterCategory('mujer-calzado')"><span>Calzado</span></div>
+            <div class="cat-card" data-cat="ninos-ropa" onclick="filterCategory('ninos-ropa')"><span>Niños</span></div>
+            <div class="cat-card" data-cat="juguetes" onclick="filterCategory('juguetes')"><span>Juguetes</span></div> 
+            <div class="cat-card" data-cat="hogar" onclick="filterCategory('hogar')"><span>Hogar y Comodidades</span></div> 
+            <div class="cat-card" data-cat="corporal" onclick="filterCategory('corporal')"><span>Productos de Belleza</span></div>
+            <div class="cat-card" data-cat="belleza" onclick="filterCategory('belleza')"><span>Salón</span></div>
+            <div class="cat-card" data-cat="electro" onclick="filterCategory('electro')"><span>Electrodomésticos</span></div>
+        </div>
+
         <div class="search-wrapper">
             <input type="text" id="searchBar" class="search-input" placeholder="🔍 Buscar producto por nombre..." oninput="searchProducts()">
         </div>
 
-        <div class="store-grid" id="storeGrid">
-            </div>
+        <div class="store-grid" id="storeGrid"></div>
     </main>
 
     <section class="container location" id="ubicacion">
-            <h2>Visítanos</h2>
-            <div class="loc-grid">
-                <div class="loc-left-col">
-                    <p class="address-text">
-                        Estamos ubicados en una zona accesible de Ahuachapán, listos para brindarte la mejor atención presencial tanto en nuestra tienda de variedades como en los servicios estéticos del Salón de Belleza.
-                        <br><br>
-                        📍 <strong>Dirección:</strong> C. Zacamil, Ahuachapán, El Salvador
-                    </p>
-                    <div class="loc-img-container">
-                        <img src="fdlugar.png" alt="Local Variedades Alejandro">
-                    </div>
+        <h2>Visítanos</h2>
+        <div class="loc-grid">
+            <div class="loc-left-col">
+                <p class="address-text">
+                    Estamos ubicados en una zona accesible de Ahuachapán, listos para brindarte la mejor atención presencial tanto en nuestra tienda de variedades como en los servicios estéticos del Salón de Belleza.
+                    <br><br>
+                    📍 <strong>Dirección:</strong> C. Zacamil, Ahuachapán, El Salvador
+                </p>
+                <div class="loc-img-container">
+                    <img src="fdlugar.png" alt="Local Variedades Alejandro">
                 </div>
-
-                <div class="map-container">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2246.969927235981!2d-89.84919376014987!3d13.928008312778392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f62970058ff4a73%3A0x1b5da5c70f2d0c93!2sVelasquez%20Tours!5e1!3m2!1ses!2ssv!4v1781650886160!5m2!1ses!2ssv" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-            height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-             </div>
             </div>
-        </section>
+
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2246.969927235981!2d-89.84919376014987!3d13.928008312778392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f62970058ff4a73%3A0x1b5da5c70f2d0c93!2sVelasquez%20Tours!5e1!3m2!1ses!2ssv!4v1781650886160!5m2!1ses!2ssv" width="600" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
 
     <footer>
-        <p>&copy; 2026 Variedades Alejandro. Todos los derechos reservados.</p>
+        <p>© 2026 Variedades Alejandro. Todos los derechos reservados.</p>
         <p>Ahuachapán, El Salvador</p>
     </footer>
 
-    <!-- MODAL DETALLE PRODUCTO -->
     <div class="modal" id="productModal">
-    <div class="modal-content-wide">
-        <button type="button" class="close-modal" onclick="closeProductModal()">✕</button>
-        
-        <div class="modal-left-column">
-            <div class="modal-img-container">
-                <img id="modalImg" src="" alt="Vista previa">
-            </div>
-        </div>
-        
-        <div class="modal-right-column">
-            <h3 id="modalTitle" class="modal-product-title"></h3>
-            <p id="modalPrice" class="modal-product-price"></p>
+        <div class="modal-content-wide">
+            <button type="button" class="close-modal" onclick="closeProductModal()">✕</button>
             
-            <p class="modal-product-desc">Artículo disponible en Variedades Alejandro. Haz tu consulta directa por WhatsApp.</p>
-            
-            <div class="size-selector" id="sizeSelectorArea">
-                <span class="size-label" id="variantLabel">TALLAS DISPONIBLES</span>
-                <div class="size-options" id="sizeOptionsBox"></div>
-            </div>
-
-            <div class="qty-area" id="qtyArea">
-                <div class="qty-controls">
-                    <button type="button" class="qty-btn" onclick="updateQty(-1)">-</button>
-                    <span class="qty-val" id="qtyVal">1</span>
-                    <button type="button" class="qty-btn" onclick="updateQty(1)">+</button>
+            <div class="modal-left-column">
+                <div class="modal-img-container">
+                    <img id="modalImg" src="" alt="Vista previa">
                 </div>
             </div>
+            
+            <div class="modal-right-column">
+                <h3 id="modalTitle" class="modal-product-title"></h3>
+                <p id="modalPrice" class="modal-product-price"></p>
+                
+                <p class="modal-product-desc">Artículo disponible en Variedades Alejandro. Haz tu consulta directa por WhatsApp.</p>
+                
+                <div class="size-selector" id="sizeSelectorArea">
+                    <span class="size-label" id="variantLabel">TALLAS DISPONIBLES</span>
+                    <div class="size-options" id="sizeOptionsBox"></div>
+                </div>
 
-            <button type="button" class="send-wp-final" onclick="sendToWhatsApp()">
-                <span>Pedir por WhatsApp</span>
-            </button>
+                <div class="qty-area" id="qtyArea">
+                    <div class="qty-controls">
+                        <button type="button" class="qty-btn" onclick="updateQty(-1)">-</button>
+                        <span class="qty-val" id="qtyVal">1</span>
+                        <button type="button" class="qty-btn" onclick="updateQty(1)">+</button>
+                    </div>
+                </div>
+
+                <button type="button" class="send-wp-final" onclick="sendToWhatsApp()">
+                    <span>Pedir por WhatsApp</span>
+                </button>
+            </div>
         </div>
     </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>
-<script src="index.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="index.js"></script>
 </body>
 </html>
