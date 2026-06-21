@@ -167,7 +167,7 @@ function openProductModal(prodId) {
         if (modalDesc) modalDesc.innerText = "Juguete disponible en Variedades Alejandro. Consulta modelos y existencias por WhatsApp.";
     } else if (currentActiveProd.categoria === 'hogar') {
         if (qtyArea) qtyArea.style.display = stock <= 0 ? 'none' : 'flex';
-        if (variantLabel) variantLabel.innerText = "MEDIDAS / DISEÑOS";
+        if (variantLabel) variantLabel.innerText = "DISEÑOS";
         if (modalDesc) modalDesc.innerText = "Artículo de hogar disponible en Variedades Alejandro. Consulta diseños y entregas por WhatsApp.";
     } else if (currentActiveProd.categoria === 'belleza') {
         if (variantLabel) variantLabel.innerText = "PROGRAMAR CITA";
@@ -185,11 +185,7 @@ function openProductModal(prodId) {
         if (qtyArea) qtyArea.style.display = stock <= 0 ? 'none' : 'flex';
         if (variantLabel) variantLabel.innerText = "DISPONIBLES";
         if (modalDesc) modalDesc.innerText = "Producto disponible en Variedades Alejandro. Consulta tonos y disponibilidad por WhatsApp.";
-    } else {
-        if (qtyArea) qtyArea.style.display = stock <= 0 ? 'none' : 'flex';
-        if (variantLabel) variantLabel.innerText = "TALLAS DISPONIBLES";
-        if (modalDesc) modalDesc.innerText = "Artículo disponible en Variedades Alejandro. Haz tu consulta directa por WhatsApp.";
-    }
+    } 
 
     const box = document.getElementById('sizeOptionsBox');
     if (box) {
@@ -321,7 +317,7 @@ function sendToWhatsApp() {
     } else if (currentActiveProd.categoria === 'electro') {
         msg = `¡Hola! Estoy interesado en este electrodoméstico de Variedades Alejandro:\n\n` +
               `*Aparato:* ${currentActiveProd.nombre}\n` +
-              `*Capacidad/Diseño:* ${selectedSizeStr}\n` +
+              `*Diseño:* ${selectedSizeStr}\n` +
               `*Precio:* $${Number(currentActiveProd.precio).toFixed(2)}\n` +
               `*Cantidad:* ${qty}\n\n` +
               `¡Podría brindarme más información!`;
