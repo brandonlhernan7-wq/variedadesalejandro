@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administración - Variedades Alejandro</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
 
     <div class="admin-wrapper" id="admin-panel">
         <header class="dashboard-header">
             <div class="header-left">
-                <img src="logoAV.png" alt="Logo" class="admin-logo">
+                <img src="img/logoAV.png" alt="Logo" class="admin-logo">
                 <div class="header-titles">
                     <h1>Dashboard de Alejandro</h1>
                     <p>Gestiona productos y servicios</p>
@@ -40,13 +40,14 @@
                     </div>
                     <div class="form-group">
                         <label>Categoría</label>
+                        <!-- VALORES CORREGIDOS Y UNIFICADOS COHERENTEMENTE -->
                         <select id="productCategory" required>
                                <option value="mujer-ropa">Ropa Mujer</option>
                                <option value="hombre-ropa">Ropa Hombre</option>
                                <option value="mujer-calzado">Calzado</option>
-                               <option value="ninos-ropa">Ropa Niños</option>
-                               <option value="ninos-calzado">Juguetes</option> 
-                               <option value="hombre-calzado">Hogar y Comodidades</option> 
+                               <option value="ninos-ropa">Niños</option>
+                               <option value="juguetes">Juguetes</option> 
+                               <option value="hogar">Hogar y Comodidades</option> 
                                <option value="corporal">Productos de Belleza</option>
                                <option value="belleza">Salón</option>
                                <option value="electro">Electrodomésticos</option>
@@ -83,12 +84,10 @@
             </main>
         </div>
     </div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="supabase.js"></script>
-
-<script src="auth.js"></script>
-
-<script src="admin.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/admin.js"></script>
 </body>
 </html>
