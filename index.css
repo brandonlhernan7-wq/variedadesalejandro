@@ -706,9 +706,339 @@ overflow: hidden;
 }
 
 /* ==========================================================================
+   NUEVOS ESTILOS: ESTRUCTURA DEL CARRITO DE COMPRAS (INTEGRACIÓN)
+   ========================================================================== */
+
+/* 1. Contenedor de alineación para Carrito + Tres Rayitas */
+.nav-controls-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Separación horizontal limpia entre el carrito y las tres rayitas */
+}
+
+/* 2. El botón del Carrito en el Header (Posición estratégica) */
+.cart-icon-container {
+    position: relative;
+    cursor: pointer;
+    color: var(--azul);
+    transition: transform 0.2s ease, color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-icon-container:hover {
+    transform: scale(1.08);
+    color: var(--rosado);
+}
+
+.cart-icon-svg {
+    width: 28px;
+    height: 28px;
+}
+
+/* Globo rojo de notificación del carrito */
+.cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background-color: var(--danger);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 800;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    box-shadow: 0 2px 5px rgba(239, 68, 68, 0.4);
+    animation: popBadge 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popBadge {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+}
+
+/* 3. Panel Lateral del Carrito (Sidebar Drawer) */
+.cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: -400px; /* Oculto inicialmente a la derecha */
+    width: 100%;
+    max-width: 380px; /* Ancho cómodo en móviles y PC */
+    height: 100vh;
+    background: var(--blanco);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+    z-index: 2500; /* Por encima del header y del modal normal */
+    display: flex;
+    flex-direction: column;
+    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cart-sidebar.active {
+    right: 0; /* Despliegue fluido */
+}
+
+/* Encabezado del Carrito */
+.cart-sidebar-header {
+    padding: 24px;
+    background: white;
+    border-bottom: 1px solid var(--gris-luz);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-sidebar-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--azul);
+}
+
+.close-cart-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--negro);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-cart-btn:hover {
+    color: var(--danger);
+}
+
+/* Cuerpo con Scroll para los productos agregados */
+.cart-items-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.empty-cart-msg {
+    text-align: center;
+    color: #64748b;
+    font-size: 0.95rem;
+    margin-top: 40px;
+}
+
+/* Pie del Carrito (Resumen y Botón WhatsApp) */
+.cart-sidebar-footer {
+    padding: 24px;
+    background: white;
+    border-top: 1px solid var(--gris-luz);
+}
+
+.cart-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+#cartTotalVal {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--azul);
+}
+
+/* El botón final de WhatsApp dentro del carrito */
+.btn-checkout-whatsapp {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--whatsapp);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-checkout-whatsapp:hover {
+    background-color: #1ebd56;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
+}
+
+/* Fondo oscurecido de fondo (Overlay) */
+.cart-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 2400;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.cart-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ==========================================================================
+   OPTIMIZACIÓN DE COMPONENTES EXISTENTES Y RESPONSIVIDAD (CARRITO)
+   ========================================================================== */
+
+/* 1. Corrección del Botón del Modal (Ahora es Agregar al Carrito) */
+.send-wp-final {
+    background: var(--azul) !important; /* Cambia a azul para diferenciarlo de WhatsApp */
+    transition: background-color 0.2s ease, transform 0.2s ease !important;
+}
+
+.send-wp-final:hover,
+.send-wp-final:active,
+.send-wp-final:focus {
+    background-color: #123256 !important; /* Un azul más oscuro al presionar */
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(26, 67, 115, 0.2) !important;
+}
+
+/* Si el producto está agotado, atenuamos el botón */
+.send-wp-final:disabled {
+    background-color: #94a3b8 !important;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* 2. Estilos para los elementos dentro de la lista del carrito (.cart-items-container) */
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    border: 1px solid var(--gris-luz);
+    position: relative;
+}
+
+.cart-item-img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    background: #f1f5f9;
+    border-radius: 8px;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cart-item-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--negro);
+    line-height: 1.2;
+}
+
+.cart-item-meta {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.cart-item-price {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--azul);
+    margin-top: 2px;
+}
+
+/* Botón para eliminar un artículo del carrito */
+.remove-item-btn {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.2s;
+}
+
+.remove-item-btn:hover {
+    color: var(--danger);
+}
+
+/* 3. Ajustes de Responsividad Avanzada para el Header (Móviles) */
+@media (max-width: 768px) {
+    .nav-container {
+        padding: 10px 15px;
+    }
+    
+    .logo-area img {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .logo-title {
+        font-size: 1.05rem;
+    }
+
+    /* Ajuste fino de la trayectoria de los controles superiores */
+    .nav-controls-wrapper {
+        gap: 15px; /* Reducimos espacio en celular para que no empuje el logo */
+    }
+
+    .cart-icon-svg {
+        width: 26px;
+        height: 26px;
+    }
+
+    /* Reducción de ancho del panel en pantallas súper pequeñas */
+    .cart-sidebar {
+        max-width: 100%; /* Ocupa toda la pantalla en celulares para mejor lectura */
+        right: -100%;
+    }
+}
+
+/* ==========================================================================
    6. SECCIONES ADICIONALES (UBICACIÓN Y FOOTER)
    ========================================================================== */
-.location {
+.whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--whatsapp);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            text-decoration: none;
+        }
+
+        .whatsapp-float svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+   .location {
     background: #e2e8f0;
     text-align: left !important;
     max-width: 1000px; 
