@@ -157,7 +157,7 @@ function openProductModal(prodId) {
         if (cartBtn) {
             cartBtn.disabled = false;
             cartBtn.style.backgroundColor = 'var(--whatsapp)'; // Forzar verde WhatsApp
-            cartBtn.innerHTML = `<span>Consultar Cita por WhatsApp →</span>`;
+            cartBtn.innerHTML = `<span>Consultar Cita por WhatsApp</span>`;
         }
     } else {
         stockDisplay.style.display = 'block';
